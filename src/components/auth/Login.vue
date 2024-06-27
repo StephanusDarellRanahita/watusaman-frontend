@@ -1,126 +1,249 @@
 <template>
-    <Alert :visible="alert.visible" :message="alert.message" :background="alert.background" :text="alert.text" class="mx-auto"/>
-    <Navbar>
-        <button v-if="!isLoggedIn" :class="isRegister ? ['text-black'] : ['text-orange-600', 'border-b', 'border-b-orange-600'] " class="my-auto transition-all duration-500" @click="loginClick">Login
+    <Navbar class="text-white text-[20px]">
+        <button v-if="!isLoggedIn" class="my-auto" @click="admin">Admin</button>
+        <button v-if="!isLoggedIn"
+            :class="isRegister ? ['text-white'] : ['text-red-600', 'border-b', 'border-b-red-600', 'text-[25px]']"
+            class="my-auto transition-all duration-500" @click="loginClick">Login
         </button>
-        <button v-if="!isLoggedIn" :class="isRegister ? ['text-orange-600', 'border-b', 'border-b-orange-600'] : ['text-black']" class="my-auto transition-all duration-500" @click="registerClick">Register</button>
+        <button v-if="!isLoggedIn"
+            :class="isRegister ? ['text-red-600', 'border-b', 'border-b-red-600', 'text-[25px]'] : ['text-white']"
+            class="my-auto transition-all duration-500" @click="registerClick">Register</button>
     </Navbar>
-    <div :class="isRegister ? 'ml-[5cm]' : 'ml-[1cm]'" class="transition-all duration-500 ease-in-out px-[1cm] py-[2cm]">
-        <div class="ml-[2cm] w-fit mt-[1cm] border-2 border-yellow-200 bg-yellow-50 rounded-tr-xl p-[0.5cm] rounded-bl-xl">
-            <p class="font-bold text-center transition-all ease-in-out duration-[5s]">{{ isRegister ? 'Register' : 'Login'
-            }}</p><br>
-            <form v-if="!isRegister" @submit.prevent="loginSubmit" class="flex flex-col gap-[0.5cm] login-form">
-                <a-input type="email" v-model:value="email" placeholder="Email" required />
-                <a-input type="password" v-model:value="password" placeholder="Password" required />
-                <button type="submit" class="font-bold bg-yellow-200 rounded-xl w-[3cm] h-[1cm] mx-auto">Submit</button>
-            </form>
-            <form v-else-if="isRegister" @submit.prevent="registSubmit" class="flex flex-col gap-[0.5cm] login-form">
-                <a-input type="name" v-model:value="name" placeholder="Name" required />
-                <a-input type="email" v-model:value="email" placeholder="Email" required />
-                <a-input type="password" v-model:value="password" placeholder="Password" required />
-                <button type="submit" class="font-bold bg-yellow-200 rounded-xl w-[3cm] h-[1cm] mx-auto">Submit</button>
-            </form>
+    <div class="transition-all duration-500 ease-in-out px-[1cm] py-[2cm] h-screen flex gap-[2cm] ml-[1cm]">
+        <div class="flex flex-col">
+            <div class="mx-auto w-[10cm] mt-[1cm] border-2 border-red-600 bg-white text-black  p-[0.5cm] rounded-md font-mono transition-all duration-500"
+                :class="isRegister ? 'h-[11cm]' : 'h-[9cm]'">
+                <p class="font-bold text-center text-[40px] w-[8.92cm] transition-all duration-[0.5s]"
+                    :class="isRegister ? ['opacity-0', 'ml-[6cm]'] : ['opacity-100']">LOGIN</p>
+                <p class="font-bold text-center text-[40px] transition-all duration-[0.5s] absolute top-[3.5cm]  "
+                    :class="isRegister ? ['opacity-100', 'left-[5.7cm]'] : ['opacity-0', 'left-[3cm]']">REGISTER</p>
+                <div class="border-b-[3px] border-b-red-600 mb-[0.5cm]"></div>
+                <a-form :class="isRegister ? 'opacity-0' : ['opacity-100', 'z-30']" :model="formState" autocomplete="off"
+                    @finish="loginSubmit" class="flex flex-col font-mono login-form">
+                    <a-form-item name="email"
+                        :rules="[{ required: true, message: 'Email Tidak Boleh Kosong!' }, { type: 'email', message: 'Input Email Yang Valid!' }]">
+                        <p class="ml-[4px] font-mono">Email</p>
+                        <a-input type="email" v-model:value="formState.email" placeholder="Email"
+                            class="font-mono border-2 border-black" />
+                    </a-form-item>
+                    <a-form-item name="password"
+                        :rules="[{ required: true, message: 'Password Tidak Boleh Kosong!' }, { min: 3, message: 'Password Minimal 3 Digit!' }]">
+                        <p class="ml-[4px]">Password</p>
+                        <a-input-password v-model:value="formState.password" placeholder="Password"
+                            class="font-mono border-2 border-black" />
+                    </a-form-item>
+                    <button html-type="submit"
+                        class="font-bold  rounded-xl w-[3cm] h-[1cm] mx-auto border-[2px] hover:bg-red-200 border-red-600 transition-all duration-[0.5s] ease-in-out"
+                        :class="isRegister ? ['opacity-100', 'mt-[2cm]'] : ['opacity-100',]">Submit</button>
+                </a-form>
+                <a-form class="flex flex-col login-form absolute top-[5.7cm] w-[8.9cm]" :model="formState" autocomplete="off"
+                    @finish="registSubmit" :class="isRegister ? 'opacity-100' : ['opacity-0', '-z-20']">
+                    <a-form-item name="name" :rules="[{ required: true, message: 'Nama Tidak Boleh Kosong!' }]">
+                        <p class="ml-[4px] font-mono">Nama</p>
+                        <a-input v-model:value="formState.name" placeholder="Nama" class="font-mono border-2 border-black" />
+                    </a-form-item>
+                    <a-form-item name="email"
+                        :rules="[{ required: true, message: 'Email Tidak Boleh Kosong!' }, { type: 'email', message: 'Input Email Yang Valid!' }]">
+                        <p class="ml-[4px] font-mono">Email</p>
+                        <a-input v-model:value="formState.email" placeholder="Email" class="font-mono border-2 border-black" />
+                    </a-form-item>
+                    <a-form-item name="password"
+                        :rules="[{ required: true, message: 'Password Tidak Boleh Kosong!' }, { min: 3, message: 'Password Minimal 3 Digit!' }]">
+                        <p class="ml-[4px] font-mono">Password</p>
+                        <a-input-password v-model:value="formState.password" placeholder="Password"
+                            class="font-mono border-2 border-black" />
+                    </a-form-item>
+                    <button html-type="submit"
+                        class="font-bold  rounded-xl w-[3cm] h-[1cm] mx-auto border-[2px] hover:bg-red-200 border-red-600 transition-all duration-[0.5s]"
+                        :class="isRegister ? ['opacity-100'] : ['-m-[2cm]']">Submit</button>
+                </a-form>
+            </div>
+            <button @click="scrollToFooter" class="container border border-red-600 mt-[0.5cm] rounded-md w-[7.5cm] mx-auto flex p-[0.2cm] hover:bg-red-300 transition-all duration-500">
+                <svg-icon type="mdi" :path="path.mdiGoogleMaps"></svg-icon>
+                <p class="text-[14px] ml-[4px] font-bold mt-[2px]">VILLA WATUSAMAN YOGYAKARTA</p>
+            </button>
+            <button @click="scrollToFooter" class="container border border-red-600 mt-[0.5cm] rounded-md w-[7.5cm] mx-auto flex p-[0.2cm] hover:bg-red-300 transition-all duration-500">
+                <div class="flex mx-auto gap-[0.2cm]">
+                    <svg-icon type="mdi" class="w-[20px]" :path="path.mdiPhoneClassic"></svg-icon>
+                    <p class="text-[14px] font-bold mt-[2px]">CONTACT</p>
+                </div>
+            </button>
         </div>
-        <div class="absolute bg-repeat opacity-[5%] inset-10 -z-10" style="background-image: url('/Cloud.png');"></div>
+        <div class="container ml-[1cm] rounded-md mt-[1cm] gap-[1cm] flex overflow-auto">
+            <div v-for="(data, index) in kamar" :key="index"
+                class="border-2 border-red-600 w-[7cm] h-[5cm] overflow-hidden hover:h-[8.9cm] transition-all duration-500 text-center indent-1 rounded-md">
+                <img :src="data.image" class="h-[5cm] transition-all duration-[0.5s]" />
+                <p class="font-bold ">Kamar {{ data.nomor_kamar }} Tipe {{ data.tipe }}</p>
+                <p class="m-[0.5cm]">{{ data.deskripsi }}</p>
+            </div>
+        </div>
     </div>
+    <Footer id="footer-section">
+        
+    </Footer>
+    <a-modal v-model:open="isOpen" title="PIN" class="text-center" @ok="loginAdmin">
+        <PinInput @update:pin="handlePinUpdate" class="mx-auto w-fit"></PinInput>
+    </a-modal>
 </template>
 <script>
-import axios from 'axios'
 import { local } from '../../api' //import URL for axios
 import { mapActions, mapState } from 'vuex'
 import { RouterLink } from 'vue-router'
+
+import axios from 'axios'
 import Navbar from '../template/Navbar.vue'
 import Alert from '../template/Alert.vue'
+import PinInput from '../template/Pin.vue'
+import Footer from '../template/Footer.vue'
+
+import { message } from 'ant-design-vue';
+
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiGoogleMaps, mdiPhoneClassic } from '@mdi/js'
 
 export default {
     data() {
         return {
-            name: '',
-            email: '',
-            password: '',
             isPageTransitioning: false,
-            isRegister: false
+            isRegister: false,
+            isOpen: false,
+            pin: '',
+            formState: {
+                name: '',
+                email: '',
+                password: ''
+            },
+            kamar: [],
+            path: {
+                mdiGoogleMaps, mdiPhoneClassic
+            }
         }
     },
     computed: {
         ...mapState(['isLoggedIn', 'alert', 'idUser']),
     },
     mounted() {
-        console.log('Id: ', localStorage.getItem('idUser'))
+        console.log('Id: ', localStorage.getItem('idUser')),
+            this.getKamar()
     },
     methods: {
         ...mapActions(['login', 'showAlert', 'hideAlert']),
         async loginSubmit() {
+            const loadingMessage =  message.loading('Verifying', 0)
             await axios.post(local + 'login', {
-                email: this.email,
-                password: this.password
+                email: this.formState.email,
+                password: this.formState.password
             }, {
                 headers: {
                     Accept: 'application/json',
                 }
             })
                 .then(async (res) => {
-                    this.showAlert({ message: res.data.message, background: "bg-green-300", text: "text-black" })
+                    loadingMessage()
                     console.log(res)
-                    localStorage.setItem('token', res.data.data)
-                    localStorage.setItem('idUser', res.data.data.id)
+                    localStorage.setItem('token', res.data.token)
+                    localStorage.setItem('idUser', res.data.user.data.id)
                     this.login()
-                    await new Promise((resolve) => {
-                        setTimeout(() => {
-                            this.hideAlert();
-                            resolve();
-                        }, 2000);
-                    });
                     this.email = ''; this.password = ''
                     this.$router.push('/dashboard')
+                    message.success(res.data.message, 2)
                 })
-                .catch((error) => {
+                .catch(async (error) => {
+                    loadingMessage()
                     console.error(error.response)
                     console.error(error.response.data)
-                    this.showAlert({ message: error.response.data.message, background: "bg-red-500", text: "text-white" })
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            this.hideAlert();
-                            resolve();
-                        }, 2000);
-                    });
-                    this.email = ''; this.password = ''
+                    message.error(error.response.data.message, 2)
+                })
+        },
+        async loginAdmin() {
+            const loadingMessage = message.loading('Verifying', 0)
+            await axios.post(local + `login-admin/${this.pin}`, {}, {
+                headers: {
+                    Accept: 'application/json'
+                }
+            })
+                .then(async (res) => {
+                    loadingMessage()
+                    console.log(res)
+                    localStorage.setItem('token', res.data.token)
+                    this.login()
+                    this.pin = ''
+                    this.isOpen = false
+                    this.$router.push('/dashboardAdmin')
+                    message.success(res.data.message,2)
+                })
+                .catch(async (error) => {
+                    loadingMessage()
+                    console.error(error.response)
+                    console.error(error.response.data)
+                    this.pin = ''
+                    this.isOpen = false
+                    message.error(error.response.data.message,2)
                 })
         },
         async registSubmit() {
+            const loadingMessage = message.loading('Loading', 0)
             await axios.post(local + 'register', {
-                name: this.name,
-                email: this.email,
-                password: this.password
+                name: this.formState.name,
+                email: this.formState.email,
+                password: this.formState.password
             }, {
+                headers: {
+                    Accept: 'application/json',
+                }
+            })
+                .then(async (res) => {
+                    loadingMessage()
+                    console.log(res)
+                    this.emailSend()
+                    this.isRegister = false
+                    this.name = ''; this.email = ''; this.password = ''
+                    message.success(res.data.message, 2)
+                    
+                })
+                .catch(async (error) => {
+                    loadingMessage()
+                    console.error(error.response)
+                    console.error(error.response.data.email)
+                    this.name = ''; this.email = ''; this.password = ''
+                    message.error(error.response.data.email, 2)
+                })
+        },
+        async emailSend() {
+            await axios.get(local + `send-email?email=${this.formState.email}&nama=${this.formState.name}`, {},{
+                headers: {
+                    Accept: 'application/json',
+                }
+            })
+                .then(res => {
+                    console.log(res)
+                })
+                .catch((error) => {
+                    console.error(error.response)
+                })
+        },
+        async getKamar() {
+            await axios.get(local + 'kamars', {
                 headers: {
                     Accept: 'application/json'
                 }
             })
                 .then(res => {
                     console.log(res)
-                    this.showAlert({ message: res.data.message, background: "bg-green-300", text: "text-black" })
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            this.hideAlert();
-                            resolve();
-                        }, 2000);
-                    });
-                    this.isRegister = false
-                    this.name = ''; this.email = ''; this.password = ''
+                    this.kamar = res.data.data.data.sort((a, b) => a.nomor_kamar - b.nomor_kamar)
                 })
-                .catch((error) => {
-                    console.error(error.response)
-                    console.error(console.error(error.response.data))
-                    this.showAlert({ message: error.reponse.data.message, background: "bg-red-500", text: "text-white+" })
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            this.hideAlert();
-                            resolve();
-                        }, 2000);
-                    });
-                    this.name = ''; this.email = ''; this.password = ''
-                })
+        },
+        scrollToFooter() {
+            const footerSection = document.getElementById('footer-section');
+            if (footerSection) {
+                footerSection.scrollIntoView({ behavior: 'smooth' })
+            }
+        },
+        handlePinUpdate(pin) {
+            this.pin = pin
+        },
+        admin() {
+            this.isOpen = true
         },
         loginClick() {
             this.isRegister = false
@@ -132,7 +255,10 @@ export default {
     components: {
         Navbar,
         Alert,
-        RouterLink
+        PinInput,
+        Footer,
+        RouterLink,
+        SvgIcon
     }
 }
 </script>

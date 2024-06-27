@@ -8,6 +8,8 @@ import  store from './store'
 import router from './router'
 import Antd from 'ant-design-vue'
 import moment from 'moment'
+//import ApexCharts
+import VueApexCharts from 'vue3-apexcharts'
 
 const app = createApp(App)
 
@@ -19,5 +21,6 @@ app.config.globalProperties.$filters = {
 
 app.use(router)
 .use(Antd)
+.use(VueApexCharts)
 .use(store)
 .mount('#app')

@@ -1,7 +1,6 @@
 <template>
-    <div class="flex mx-auto text-orange-400 w-fit gap-[0.5cm]">
-        <form v-if="!userRes.length"
-            class="p-[0.5cm] flex flex-col gap-[2px] border-2 rounded-xl border-yellow-300 mb-[0.5cm]"
+    <div class="flex mx-auto text-black w-fit gap-[0.5cm] mt-[-1.5cm]">
+        <form v-if="userRes == null" class="p-[0.5cm] flex flex-col gap-[2px] border-2 rounded-xl border-red-600 mb-[0.5cm]"
             @submit.prevent="submitReservasi">
             <div class="font-bold text-left mb-[0.5cm]">
                 <p>Tanggal</p>
@@ -11,7 +10,8 @@
                 <p class="font-bold mb-[0.2cm]">Jumlah Orang</p>
                 <p>Dewasa</p>
                 <div class="flex gap-[0.2cm]">
-                    <a-input-number v-model:value="input.dewasa" :max="maxDewasa" class="w-[2cm]" required></a-input-number>
+                    <a-input-number v-model:value="input.dewasa" :min="1" :max="maxDewasa" class="w-[2cm]" :controls="false"
+                        required></a-input-number>
                     <a-button @click="updateJumlah('inc', 'dewasa')"><svg-icon type="mdi" :path="path.mdiPlus"
                             class="w-[0.5cm]" /></a-button>
                     <a-button @click="updateJumlah('dec', 'dewasa')"><svg-icon type="mdi" :path="path.mdiMinus"
@@ -19,11 +19,13 @@
                 </div>
                 <p>Anak-anak</p>
                 <div class="flex gap-[0.2cm]">
-                    <a-input-number v-model:value="input.anak" :max="maxAnak" class="w-[2cm]" required></a-input-number>
+                    <a-input-number v-model:value="input.anak" :min="0" :max="maxAnak" class="w-[2cm]" :controls="false"
+                        required></a-input-number>
                     <a-button @click="updateJumlah('inc', 'anak')"><svg-icon type="mdi" :path="path.mdiPlus"
                             class="w-[0.5cm]" /></a-button>
                     <a-button @click="updateJumlah('dec', 'anak')"><svg-icon type="mdi" :path="path.mdiMinus"
                             class="w-[0.5cm]" /></a-button>
+                    <p>Umur : 5 - 17 Tahun</p>
                 </div>
             </div>
             <div class="font-bold text-left">
@@ -34,25 +36,29 @@
                 <p>Nama</p>
                 <a-input v-model:value="input.nama" placeholder="Nama" required></a-input>
             </div>
+            <div class="font-bold text-left">
+                <p>Total Harga</p>
+                <a-input v-model:value="updateHarga" :disabled="true"></a-input>
+            </div>
             <div>
                 <button type="submit" class="mt-[0.2cm] rounded-xl p-[0.2cm]"
-                    :class="check ? ['bg-transparent', 'text-gray-400', 'border-2', 'cursor-not-allowed'] : ['bg-blue-600', 'text-white']"
+                    :class="check ? ['bg-transparent', 'text-gray-400', 'border-2', 'cursor-not-allowed'] : ['bg-red-600', 'text-white', 'hover:ring-[2px]', 'hover:ring-red-600', 'hover:bg-red-200', 'hover:text-red-600']"
                     :disabled="check">Reservasi</button>
             </div>
         </form>
-        <form v-else-if="userRes" class="p-[0.5cm] flex flex-col gap-[2px] border-2 rounded-xl border-yellow-300 mb-[0.5cm]"
+        <form v-else-if="userRes" class="p-[0.5cm] flex flex-col gap-[2px] border-2 rounded-xl border-red-600 mb-[0.5cm]"
             @submit.prevent="updateReservasi">
             <div class="font-bold text-left mb-[0.5cm]">
                 <p>Tanggal</p>
-                <p class="text-gray-300 bg-gray-100 border ont-mono rounded-xl p-[0.2cm]">{{ formatDate(record.start_date)
-                }} - {{ formatDate(record.end_date) }} </p>
+                <p class="text-gray-300 bg-gray-100 border ont-mono rounded-xl p-[0.2cm]">{{ formatDate(userRes.start_date)
+                }} - {{ formatDate(userRes.end_date) }} </p>
             </div>
             <div class="text-left mb-[0.5cm]">
                 <p class="font-bold mb-[0.2cm]">Jumlah Orang</p>
                 <p>Dewasa</p>
                 <div class="flex gap-[0.2cm]">
-                    <a-input-number v-model:value="record.dewasa" :min="1" :max="maxDewasa" class="w-[2cm]"
-                        required></a-input-number>
+                    <a-input-number v-model:value="userRes.dewasa" :min="1" :max="maxDewasa" class="w-[2cm]"
+                        :controls="false" required></a-input-number>
                     <a-button @click="updateJumlah('inc', 'dewasa')"><svg-icon type="mdi" :path="path.mdiPlus"
                             class="w-[0.5cm]" /></a-button>
                     <a-button @click="updateJumlah('dec', 'dewasa')"><svg-icon type="mdi" :path="path.mdiMinus"
@@ -60,7 +66,8 @@
                 </div>
                 <p>Anak-anak</p>
                 <div class="flex gap-[0.2cm]">
-                    <a-input-number v-model:value="record.anak" :min="1" :max="maxAnak" class="w-[2cm]" required></a-input-number>
+                    <a-input-number v-model:value="userRes.anak" :min="1" :max="maxAnak" class="w-[2cm]" :controls="false"
+                        required></a-input-number>
                     <a-button @click="updateJumlah('inc', 'anak')"><svg-icon type="mdi" :path="path.mdiPlus"
                             class="w-[0.5cm]" /></a-button>
                     <a-button @click="updateJumlah('dec', 'anak')"><svg-icon type="mdi" :path="path.mdiMinus"
@@ -69,14 +76,19 @@
             </div>
             <div class="font-bold text-left">
                 <p>Nomor Telepon</p>
-                <a-input v-model:value="record.nomor_telepon" placeholder="08...." required></a-input>
+                <a-input v-model:value="userRes.nomor_telepon" placeholder="08...." required></a-input>
             </div>
             <div class="font-bold text-left">
                 <p>Nama</p>
-                <a-input v-model:value="record.nama" placeholder="Nama" required></a-input>
+                <a-input v-model:value="userRes.nama" placeholder="Nama" required></a-input>
+            </div>
+            <div class="font-bold text-left">
+                <p>Total Harga</p>
+                <a-input v-model:value="updateHargaRecord" placeholder="Nama" :disabled="true"></a-input>
             </div>
             <div>
-                <button type="submit" class="mt-[0.2cm] rounded-xl p-[0.2cm] bg-blue-600 text-white">Update</button>
+                <button type="submit"
+                    class="mt-[0.2cm] rounded-xl p-[0.2cm] hover:bg-red-200 border border-red-600 text-red-600">Update</button>
             </div>
         </form>
         <div v-if="condition" class="mt-[1.1cm]">
@@ -107,6 +119,8 @@ import axios from 'axios'
 import moment from 'moment'
 import { mapActions, mapState } from 'vuex'
 
+import { message } from 'ant-design-vue'
+
 export default {
     name: 'StepOne',
     data() {
@@ -114,15 +128,17 @@ export default {
             tanggal: ref(),
             check: [],
             checkMessage: {},
-            record: {},
-            userRes: [],
+            userRes: {},
+            jumlahHari: 0,
+            jumlahHariRecord: 0,
             input: {
                 startDate: null,
                 endDate: null,
                 dewasa: 0,
                 anak: 0,
                 noTelp: '',
-                nama: ''
+                nama: '',
+                harga: 0,
             },
             condition: false,
             today: new Date(),
@@ -136,19 +152,18 @@ export default {
             if (newDates && newDates.length === 2) {
                 this.input.startDate = newDates[0].format('YYYY-MM-DD')
                 this.input.endDate = newDates[1].format('YYYY-MM-DD')
-                console.log('Start Date:', this.input.startDate)
-                console.log('End Date:', this.input.endDate)
             } else {
                 this.input.startDate = null
                 this.input.endDate = null
             }
-        }
+        },
     },
     computed: {
         ...mapState(['isInputResValid', 'alert']),
         changeDate() {
             if (this.input.startDate && this.input.endDate) {
                 this.checkDate()
+                this.hari()
             }
         },
         maxDewasa() {
@@ -156,112 +171,114 @@ export default {
         },
         maxAnak() {
             return 30 - this.input.dewasa
+        },
+        updateHarga() {
+            const jumlah = this.input.dewasa + this.input.anak
+            let harga = 1250000 * this.jumlahHari
+            if (jumlah > 10) {
+                harga = harga + (jumlah - 10) * 100000
+                return this.input.harga = harga
+            }
+
+            return this.input.harga = harga
+        },
+        updateHargaRecord() {
+            const jumlah = this.userRes.dewasa + this.userRes.anak
+            let harga = 1250000 * this.jumlahHariRecord
+            if (jumlah > 10) {
+                harga = harga + (jumlah - 10) * 100000
+                return this.userRes.total_harga = harga
+            }
+            return this.userRes.total_harga = harga
         }
     },
     mounted() {
         this.recordRes()
-        console.log('Rec Tanggal: ', this.recTanggal)
     },
     methods: {
         ...mapActions(['reservasi', 'showAlert', 'hideAlert']),
         async submitReservasi() {
+            const loadingMessage = message.loading('Verifying', 0)
             await axios.post(local + `reservasi/${localStorage.getItem('idUser')}`, {
                 start_date: this.input.startDate,
                 end_date: this.input.endDate,
                 dewasa: this.input.dewasa,
                 anak: this.input.anak,
                 nomor_telepon: this.input.noTelp,
-                nama: this.input.nama
+                nama: this.input.nama,
+                total_harga: this.input.harga
             }, {
                 headers: {
                     Accept: 'application/json'
                 }
             })
-                .then(res => {
+                .then(async (res) => {
+                    loadingMessage()
                     console.log(res)
                     this.reservasi()
-                    this.showAlert({ message: res.data.message, background: 'bg-green-300', text: 'text-black' })
+                    localStorage.setItem('idReservasi', res.data.data.reservasi.id)
+                    console.log('res', localStorage.getItem('idReservasi'))
                     this.sendWhatsApp()
                     this.recTanggal = { ...this.tanggal }
-                    console.log('Sesudah Submit : ', this.tanggal)
                     this.recordRes()
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            this.hideAlert()
-                            resolve
-                        }, 2000)
-                    })
                     this.input.anak = 0
                     this.input.dewasa = 0
                     this.input.endDate = ''
                     this.input.nama = ''
                     this.input.noTelp = ''
                     this.input.startDate = ''
+                    message.success(res.data.message, 2)
+                    setTimeout(() => {
+                        window.location.reload()
+                    },1000)
                 })
-                .catch((error) => {
+                .catch(async (error) => {
+                    loadingMessage()
                     console.error(error.response)
                     console.error(error.response.data.message)
                     if (error.response.data.message.nomor_telepon) {
-                        console.log('Nomor Telepon')
-                        this.showAlert({ message: error.response.data.message.nomor_telepon[0], background: 'bg-red-500', text: 'text-white' })
-                        new Promise((resolve) => {
-                            setTimeout(() => {
-                                this.hideAlert()
-                                resolve
-                            }, 2000)
-                        })
+                        message.error(error.response.data.message.nomor_telepon[0], 2)
                     } else {
                         console.log('DEWASA')
+                        loadingMessage()
                         this.showAlert({ message: error.response.data.message, background: 'bg-red-500', text: 'text-white' })
-                        new Promise((resolve) => {
-                            setTimeout(() => {
-                                this.hideAlert()
-                                resolve
-                            }, 2000)
-                        })
+                        message.error(error.response.data.message, 2)
                     }
 
                 })
         },
         async updateReservasi() {
             const id = localStorage.getItem('idUser')
-            const date = this.record.start_date
+            const date = this.userRes.start_date
+            const loadingMessage = message.loading('Updating', 0)
             await axios.put(local + `reservasi/${id}/${date}`, {
-                dewasa: this.record.dewasa,
-                anak: this.record.anak,
-                nomor_telepon: this.record.nomor_telepon,
-                nama: this.record.nama
+                dewasa: this.userRes.dewasa,
+                anak: this.userRes.anak,
+                nomor_telepon: this.userRes.nomor_telepon,
+                nama: this.userRes.nama,
+                total_harga: this.userRes.total_harga
             }, {
                 headers: {
                     Accept: 'application/json'
                 }
             })
-                .then(res => {
+                .then(async (res) => {
+                    loadingMessage()
                     console.log(res)
                     console.log(res.data.message)
                     this.showAlert({ message: res.data.message, background: 'bg-green-300', text: 'text-black' })
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            this.hideAlert()
-                            resolve
-                        }, 2000)
-                    })
+                    message.success(res.data.message, 2)
                 })
-                .catch((error) => {
+                .catch(async (error) => {
+                    loadingMessage()
                     console.error(error.response)
                     console.error(error.response.data)
-                    this.showAlert({ message: error.response.data.message, background: 'bg-red-500', text:'text-white' })
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            this.hideAlert()
-                            resolve
-                        }, 2000)
-                    })
+                    message.error(error.response.data.message)
                 })
         },
         async recordRes() {
             const id = localStorage.getItem('idUser')
-            await axios.get(local + `reservasi/${id}`, {
+            await axios.get(local + `reservasi-payment/${id}`, {
                 headers: {
                     Accept: 'applicaton/json'
                 }
@@ -269,17 +286,14 @@ export default {
                 .then(res => {
                     console.log(res)
                     this.userRes = res.data.data
-                    console.log('User Res: ', this.userRes)
-                    if (this.userRes.length) {
-                        let i
-                        for (i = 0; i < this.userRes.length; i++) {
-                            this.record = { ...this.userRes[i] }
-                        }
-                    }
+                    this.hari()
+                    console.log('USER RES', this.userRes)
+                    console.log('JUMLAH HARI', this.jumlahHariRecord)
                 })
                 .catch((error) => {
                     console.error(error.response)
                     console.error(error.response.data.message)
+                    this.userRes = null
                 })
         },
         async checkDate() {
@@ -296,7 +310,6 @@ export default {
                     this.checkMessage = res.data.message
                     this.check = res.data.data
                     this.condition = true
-                    console.log('check: ' + this.check)
                 })
                 .catch((error) => {
                     console.error(error.response)
@@ -313,19 +326,20 @@ export default {
                 anak: this.input.anak
             })
         },
-        statusRes() {
-            let i
-            console.log('User Res Check: ', this.userRes)
-            for (i = 0; i < this.userRes.length; i++) {
-                if (this.userRes[i].status === 'MENUNGGU_KONFIRMASI') {
-                    this.record = this.userRes[i]
-                    break
-                }
-                console.log('Record: ', this.record)
+        hari() {
+            if (this.input.startDate && this.input.endDate) {
+                this.jumlahHari = moment(this.input.endDate).diff(moment(this.input.startDate), 'days')
+                return this.jumlahHari
+            } else if (this.userRes.start_date && this.userRes.end_date) {
+                this.jumlahHariRecord = moment(this.userRes.end_date).diff(moment(this.userRes.start_date), 'days')
+                return this.jumlahHariRecord
             }
+
+            return 0
+
         },
         updateJumlah(formula, type) {
-            if(!this.userRes) {
+            if (this.userRes == null) {
                 if (type == 'dewasa') {
                     if (formula == 'inc' && this.input.dewasa < 30 && (this.input.dewasa + this.input.anak) !== 30) {
                         this.input.dewasa++
@@ -339,18 +353,18 @@ export default {
                         this.input.anak--
                     }
                 }
-            } else if(this.userRes) {
+            } else if (this.userRes != null) {
                 if (type == 'dewasa') {
-                    if (formula == 'inc' && this.record.dewasa < 30 && (this.record.dewasa + this.record.anak) !== 30) {
-                        this.record.dewasa++
-                    } else if (formula == 'dec' && this.record.dewasa > 0) {
-                        this.record.dewasa--
+                    if (formula == 'inc' && this.userRes.dewasa < 30 && (this.userRes.dewasa + this.userRes.anak) !== 30) {
+                        this.userRes.dewasa++
+                    } else if (formula == 'dec' && this.userRes.dewasa > 0) {
+                        this.userRes.dewasa--
                     }
                 } else {
-                    if (formula == 'inc' && this.record.anak < 30 && (this.record.dewasa + this.record.anak) !== 30) {
-                        this.record.anak++
-                    } else if (formula == 'dec' && this.record.anak > 0) {
-                        this.record.anak--
+                    if (formula == 'inc' && this.userRes.anak < 30 && (this.userRes.dewasa + this.userRes.anak) !== 30) {
+                        this.userRes.anak++
+                    } else if (formula == 'dec' && this.userRes.anak > 0) {
+                        this.userRes.anak--
                     }
                 }
             }
