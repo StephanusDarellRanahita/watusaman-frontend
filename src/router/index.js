@@ -53,34 +53,25 @@ function getRoleFromToken(token) {
 
 router.beforeEach((to, from, next) => {
     const isAuthenticated = !!localStorage.getItem('token')
-    const isAuthenticatedDana = !!localStorage.getItem('tokenDana')
     const token = localStorage.getItem('token')
     const role = getRoleFromToken(token)
 
-    if(!to.meta.public && !isAuthenticated && from.name === 'Login' && role !== 'ADMIN') {
-        next({name: 'Login'})
-    } 
-    else if(to.meta.public && isAuthenticated && from.name === 'Login' && role === 'ADMIN') {
-        next({name: 'DashboardAdmin'})
-    }
-    else if(to.meta.public && isAuthenticated && (to.name === 'Login' && role === 'ADMIN')) {
-        next({ name:'DashboardAdmin'})
-    }
-    else if(to.meta.public && isAuthenticated && (to.name === 'Login' && role !== 'ADMIN')) {
-        next({ name:'Dashboard'})
-    }
-    else {
-        next()
-    }
-
-    if(!to.meta.public && !isAuthenticatedDana && from.name === 'LoginDana') {
-        console.log('here')
-        next({name: 'LoginDana'})
-    }else if(to.meta.public && isAuthenticatedDana && (to.name === 'LoginDana')) {
-        next({ name:'DashboardDana' })
-    }else {
-        console.log('dana');
-        next()
+    console.log('ROLE : ' + role)
+    
+    if (isAuthenticated && to.name === 'Login') {
+        if(role === 'ADMIN') {
+            next({ name: 'DashboardAdmin' })
+        } else {
+            next({ name: 'Dashboard' })
+        }
+    } else if (isAuthenticated && to.name === 'DashboardAdmin' && role !== 'ADMIN') {
+        next({ name: 'Dashboard' })
+    } else if (isAuthenticated && to.name === 'Dashboard' && role === 'ADMIN') {
+        next({ name: 'DashboardAdmin' })
+    } else if (!isAuthenticated && !to.meta.public) {
+        next({ name: 'Login' })
+    } else {
+        next();
     }
 })
 

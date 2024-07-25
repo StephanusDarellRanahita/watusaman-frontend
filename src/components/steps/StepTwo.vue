@@ -1,7 +1,7 @@
 <template>
     <Alert :message="alert.message" :background="alert.background" :text="alert.text"></Alert>
     <div class="mt-[-2cm] text-red-600 font-bold">
-        <p class="mb-[0.5cm]">Time Left: {{ formattedTime }}</p>
+        <p class="mb-[0.5cm]">Sisa Waktu: {{ formattedTime }}</p>
         <div class="flex justify-center gap-[0.5cm] ml-[10px]">
             <div v-for="(method, index) in payMethod" :key="index">
                 <button @click="handleClick(method)">
@@ -38,17 +38,17 @@ export default {
     computed: {
         ...mapState(['isPaymentOpen', 'alert']),
         formattedTime() {
+            console.log(this.remainingTime)
             const hours = Math.floor(this.remainingTime / 3600)
             const minutes = Math.floor((this.remainingTime % 3600) / 60)
             const seconds = this.remainingTime % 60
-            return `${hours}h : ${minutes}m : ${seconds}s`
+            return `${hours}j : ${minutes}m : ${seconds}d`
         }
     },
     mounted() {
         this.getData()
     },
     methods: {
-        ...mapActions(['payment','closePayment', 'showAlert', 'hideAlert']),
         async getData() {
             const id = localStorage.getItem('idUser')
             await axios.get(local + `reservasi-payment/${id}`, {

@@ -1,7 +1,8 @@
 <template>
     <div class="w-[10cm] mx-auto mb-[1cm] print:hidden">
         <div class="mx-auto border border-black p-[0.5cm]">
-            <p>INVOICE RESERVASI VILLA WATUSAMAN</p>
+            <p>FAKTUR RESERVASI VILLA WATUSAMAN</p>
+            <p>{{ formattedDate(invoice.start_date) }} - {{ formattedDate(invoice.end_date) }}</p>
         </div>
         <div class="text-left border border-black text-[13px] flex">
             <div class="w-full p-[0.1cm]">
@@ -27,8 +28,14 @@
         </div>
     </div>
     <div class="hidden print:block w-[10cm] mx-auto mb-[1cm] ">
+        <div class="hidden print:block print:mb-[1cm] w-fit mx-auto">
+            <p class="my-auto font-bold text-black text-center flex text-[35px] flex-row underline decoration-red-600">
+            <p>Villa</p>
+            <p class="text-red-600">W</p>atusaman</p>
+        </div>
         <div class="mx-auto border border-black p-[0.5cm]">
-            <p>INVOICE RESERVASI VILLA WATUSAMAN</p>
+            <p>FAKTUR RESERVASI VILLA WATUSAMAN</p>
+            <p>{{ formattedDate(invoice.start_date) }} - {{ formattedDate(invoice.end_date) }}</p>
         </div>
         <div class="text-left border border-black text-[13px] flex">
             <div class="w-full p-[0.1cm]">

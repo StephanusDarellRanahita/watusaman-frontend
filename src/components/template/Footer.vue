@@ -6,7 +6,7 @@
         </div>
         <div class="my-auto text-center">
             <p class="font-bold text-[30px]">Villa Watusaman</p>
-            <p>Watusaman Homestay, Gallery & Resto Bakmijawa</p>
+            <p>Villa Watusaman, Gallery & Resto Bakmijawa</p>
             <p>Ringroad Selatan Jl. Parangtritis km 4.5 Dusun Saman 1. No 98. Rt 11. Sewon Bantul</p>
             <p>Daerah Istimewa Yogyakarta</p>
         </div>

@@ -29,16 +29,6 @@ export default createStore({
         LOGOUT(state) {
             state.isLoggedIn = false
         },
-        SHOW_ALERT(state, payload) {
-            state.alert.visible = payload.visible
-            state.alert.message = payload.message
-            state.alert.background = payload.background
-            state.alert.text = payload.text
-        },
-        HIDE_ALERT(state) {
-            state.alert.visible = false
-            state.alert.message = ''
-        },
         RESERVASI(state) {
             state.isInputResValid = !state.isInputResValid
         },
@@ -67,12 +57,6 @@ export default createStore({
             localStorage.removeItem('idUserDana');
             commit('LOGOUTDANA')
             dispatch('navigateToLoginDana')
-        },
-        showAlert({ commit }, { message, background = '', text = ''}) {
-            commit('SHOW_ALERT', { visible: true,message, background, text })
-        },
-        hideAlert({ commit }) {
-            commit('HIDE_ALERT')
         },
         reservasi({ commit }) {
             commit('RESERVASI')

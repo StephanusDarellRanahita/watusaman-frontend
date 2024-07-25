@@ -16,7 +16,7 @@
                 <p class="font-bold text-center text-[40px] w-[8.92cm] transition-all duration-[0.5s]"
                     :class="isRegister ? ['opacity-0', 'ml-[6cm]'] : ['opacity-100']">LOGIN</p>
                 <p class="font-bold text-center text-[40px] transition-all duration-[0.5s] absolute top-[3.5cm]  "
-                    :class="isRegister ? ['opacity-100', 'left-[5.7cm]'] : ['opacity-0', 'left-[3cm]']">REGISTER</p>
+                    :class="isRegister ? ['opacity-100', 'left-[4.78cm]'] : ['opacity-0', 'left-[3cm]']">REGISTER</p>
                 <div class="border-b-[3px] border-b-red-600 mb-[0.5cm]"></div>
                 <a-form :class="isRegister ? 'opacity-0' : ['opacity-100', 'z-30']" :model="formState" autocomplete="off"
                     @finish="loginSubmit" class="flex flex-col font-mono login-form">
@@ -69,9 +69,15 @@
                 </div>
             </button>
         </div>
-        <div class="container ml-[1cm] rounded-md mt-[1cm] gap-[1cm] flex overflow-auto">
+        <div class="container ml-[1cm] rounded-md mt-[1cm] gap-[1cm] h-fit flex overflow-x-scroll snap-x snap-mandatory">
             <div v-for="(data, index) in kamar" :key="index"
-                class="border-2 border-red-600 w-[7cm] h-[5cm] overflow-hidden hover:h-[8.9cm] transition-all duration-500 text-center indent-1 rounded-md">
+                class="border-2 border-red-600 min-w-[7cm] h-[8.9cm] overflow-hidden text-center indent-1 rounded-md snap-center snap-always">
+                <img :src="data.image" class="h-[5cm] transition-all duration-[0.5s]" />
+                <p class="font-bold ">Kamar {{ data.nomor_kamar }} Tipe {{ data.tipe }}</p>
+                <p class="m-[0.5cm]">{{ data.deskripsi }}</p>
+            </div>
+            <div v-for="(data, index) in kamar" :key="index"
+                class="border-2 border-red-600 min-w-[7cm] h-[8.9cm] overflow-hidden text-center indent-1 rounded-md snap-center snap-always">
                 <img :src="data.image" class="h-[5cm] transition-all duration-[0.5s]" />
                 <p class="font-bold ">Kamar {{ data.nomor_kamar }} Tipe {{ data.tipe }}</p>
                 <p class="m-[0.5cm]">{{ data.deskripsi }}</p>
