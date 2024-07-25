@@ -206,9 +206,10 @@
             </div>
         </div>
     </div>
-    <Footer>
-        
-    </Footer>
+    <div>
+        <Footer>
+        </Footer>
+    </div>
     <a-modal v-model:open="isReset" title="Ubah Pasword" class="text-center" :footer="null">
         <a-form :model="formReset" autocomplete="off" @finish="updatePassword">
             <a-form-item name="oldPassword" :rules="[{ required:true, message: 'Password Tidak Boleh Kosong' }, { min: 3, message: 'Password Minimal 3 Digit!' }]">
