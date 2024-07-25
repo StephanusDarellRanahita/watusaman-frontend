@@ -61,12 +61,11 @@
                                 </p>
                             </div>
                             <div class="mx-auto w-fit mb-[1cm] flex gap-[0.5cm]">
-                                <button :class="data.status == 'BATAL' ? ['hidden'] : ['border-red-600','hover:bg-red-200']" 
-                                    class="border-2  rounded-md p-[4px] "
-                                    @click="cetak(data.id)">Cetak</button>
-                                <button :class="data.status == 'BATAL' ? ['hidden'] : ['border-red-600','hover:bg-red-200', 'bg-red-600', 'text-white']" 
-                                    class="font-boldp-[4px] rounded-md p-[4px]"
-                                    @click="cancel(data.id)">
+                                <button :class="data.status == 'BATAL' ? ['hidden'] : ['border-red-600', 'hover:bg-red-200']"
+                                    class="border-2  rounded-md p-[4px] " @click="cetak(data.id)">Cetak</button>
+                                <button
+                                    :class="data.status == 'BATAL' ? ['hidden'] : ['border-red-600', 'hover:bg-red-200', 'bg-red-600', 'text-white']"
+                                    class="font-boldp-[4px] rounded-md p-[4px]" @click="cancel(data.id)">
                                     Batal
                                 </button>
                             </div>
@@ -206,19 +205,21 @@
             </div>
         </div>
     </div>
-    <div>
-        <Footer>
-        </Footer>
-    </div>
+    <Footer class="print:hidden">
+    </Footer>
     <a-modal v-model:open="isReset" title="Ubah Pasword" class="text-center" :footer="null">
         <a-form :model="formReset" autocomplete="off" @finish="updatePassword">
-            <a-form-item name="oldPassword" :rules="[{ required:true, message: 'Password Tidak Boleh Kosong' }, { min: 3, message: 'Password Minimal 3 Digit!' }]">
+            <a-form-item name="oldPassword"
+                :rules="[{ required: true, message: 'Password Tidak Boleh Kosong' }, { min: 3, message: 'Password Minimal 3 Digit!' }]">
                 <a-input-password v-model:value="formReset.oldPassword" placeholder="Old Password"></a-input-password>
             </a-form-item>
-            <a-form-item name="newPassword" :rules="[{ required:true, message: 'Password Tidak Boleh Kosong' }, { min: 3, message: 'Password Minimal 3 Digit!' }]">
-                <a-input-password v-model:value="formReset.newPassword" placeholder="New Password" class="mt-[0.5cm]"></a-input-password>
+            <a-form-item name="newPassword"
+                :rules="[{ required: true, message: 'Password Tidak Boleh Kosong' }, { min: 3, message: 'Password Minimal 3 Digit!' }]">
+                <a-input-password v-model:value="formReset.newPassword" placeholder="New Password"
+                    class="mt-[0.5cm]"></a-input-password>
             </a-form-item>
-            <button type="submit" class="border-2 border-red-600 rounded-md p-[4px] text-red-600 mt-[5px] hover:bg-red-200">Submit</button>
+            <button type="submit"
+                class="border-2 border-red-600 rounded-md p-[4px] text-red-600 mt-[5px] hover:bg-red-200">Submit</button>
         </a-form>
     </a-modal>
     <a-modal v-model:open="isOpen" title="Profil" class="text-center" :footer="null" @cancel="closeOTP">
@@ -232,21 +233,22 @@
                 <p class="ml-[4px] font-mono text-left">Email</p>
                 <a-input v-model:value="formProfil.email" placeholder="Email" :disabled="true"></a-input>
             </a-form-item>
-            <a-form-item name="nomorTelepon"
-                :rules="[{ required: true, message: 'Nomor Tidak Boleh Kosong' }]">
+            <a-form-item name="nomorTelepon" :rules="[{ required: true, message: 'Nomor Tidak Boleh Kosong' }]">
                 <p class="ml-[4px] font-mono text-left">Nomor Telepon</p>
                 <a-input v-model:value="formProfil.nomorTelepon" placeholder="08..."></a-input>
             </a-form-item>
             <button html-type="submit"
-            class="font-bold  rounded-xl w-[3cm] text-red-600 h-[1cm] mx-auto border-[2px] hover:bg-red-200 border-red-600 transition-all duration-[0.5s]">Ubah</button>
+                class="font-bold  rounded-xl w-[3cm] text-red-600 h-[1cm] mx-auto border-[2px] hover:bg-red-200 border-red-600 transition-all duration-[0.5s]">Ubah</button>
         </a-form>
-        <button class="font-bold  mt-[5px] rounded-xl w-[3cm] text-red-600 h-[1cm] mx-auto border-[2px] hover:bg-red-200 border-red-600 transition-all duration-[0.5s]"
-        @click="resetPassword">Ubah Password</button>
+        <button
+            class="font-bold  mt-[5px] rounded-xl w-[3cm] text-red-600 h-[1cm] mx-auto border-[2px] hover:bg-red-200 border-red-600 transition-all duration-[0.5s]"
+            @click="resetPassword">Ubah Password</button>
         <div v-if="showOtp" class="mt-[0.5cm] w-fit mx-auto">
             <a-form :model="otp" autocomplete="off" @finish="verifOTP">
                 <p class="text-[20px] font-bold mb-[5px]">PIN</p>
                 <PinInput @update:pin="handlePinUpdate"></PinInput>
-                <button type="submit" class="border-2 border-red-600 rounded-md p-[4px] text-red-600 mt-[5px] hover:bg-red-200">Submit</button>
+                <button type="submit"
+                    class="border-2 border-red-600 rounded-md p-[4px] text-red-600 mt-[5px] hover:bg-red-200">Submit</button>
             </a-form>
         </div>
     </a-modal>
@@ -295,7 +297,7 @@ export default {
             },
             formReset: {
                 oldPassword: '',
-                newPassword: ''  
+                newPassword: ''
             },
             otp: '',
             steps: [
@@ -377,7 +379,7 @@ export default {
                     this.formProfil.email = this.user.email
                     this.formProfil.nomorTelepon = this.user.nomor_telepon
                     console.log('NOMOR TELEPON: ', this.formProfil.nomorTelepon)
-                    
+
                 })
                 .catch((error) => {
                     console.error(error.response)
@@ -435,9 +437,9 @@ export default {
                 }
             })
                 .then(res => {
-                    loadingMessage() 
+                    loadingMessage()
                     console.log('UPDATE: ', res)
-                    console.log('ID UPDATE',id)
+                    console.log('ID UPDATE', id)
                     this.getUser()
                     message.success(res.data.message)
                 })
@@ -486,7 +488,7 @@ export default {
         },
         async updatePassword() {
             const id = this.user.id
-            const loadingMessage = message.loading('Memverifikasi...',0 )
+            const loadingMessage = message.loading('Memverifikasi...', 0)
             await axios.put(local + `password-change/${id}`, {
                 old_password: this.formReset.oldPassword,
                 new_password: this.formReset.newPassword
@@ -497,7 +499,7 @@ export default {
             })
                 .then(res => {
                     loadingMessage()
-                    if(res.data.message == 'Password Tidak Sesuai!') {
+                    if (res.data.message == 'Password Tidak Sesuai!') {
                         message.error(res.data.message, 2)
                     } else {
                         this.isReset = false
@@ -509,12 +511,12 @@ export default {
                     loadingMessage()
                     console.error(error.response)
                     console.error(error.response.data)
-                    message.error(error.response.data.message, 2)  
+                    message.error(error.response.data.message, 2)
                 })
         },
         async verifOTP() {
             const id = this.user.id
-            const loadingMessage = message.loading('Memverifikasi...',0)
+            const loadingMessage = message.loading('Memverifikasi...', 0)
             await axios.post(local + `reset-otp/${id}`, {
                 otp: this.otp
             }, {
@@ -524,7 +526,7 @@ export default {
             })
                 .then(res => {
                     loadingMessage()
-                    if(res.data.message == 'Kode OTP Salah!') {
+                    if (res.data.message == 'Kode OTP Salah!') {
                         message.error(res.data.message, 2)
                     } else {
                         this.isReset = true
@@ -532,17 +534,17 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    loadingMessage() 
+                    loadingMessage()
                     console.error(error.response)
                     console.error(error.response.data)
                     message.error(error.response.data.message, 2)
                 })
-        },  
+        },
         async resetPassword() {
             const loadingMessage = message.loading('Membuat OTP...', 0)
-            await axios.post(local + 'reset-password',{
+            await axios.post(local + 'reset-password', {
                 id_user: this.user.id
-            },{
+            }, {
                 headers: {
                     Accept: 'application/json'
                 }
@@ -550,7 +552,7 @@ export default {
                 .then(res => {
                     this.sendOTP()
                     loadingMessage()
-                    console.log('RESET PASSWORD: ',res)
+                    console.log('RESET PASSWORD: ', res)
                     this.showOtp = true
                     message.success(res.data.message)
                 })
