@@ -1,6 +1,6 @@
 <template>
     <Navbar></Navbar>
-    <div class="absolute mt-[3cm] w-full">
+    <div class="pt-[3cm] w-fit px-[0.5cm] lg:w-full">
         <div class="flex flex-col mx-auto w-fit gap-[0.5cm]">
             <div class="flex justify-between">
                 <div class="flex gap-[1cm]">
@@ -41,7 +41,7 @@
             </table>
         </div>
         <a-pagination v-model:current="current" show-quick-jumper :total="total" :page-size="totalData.per_page"
-            @change="currentChange" class="ml-[19cm] mt-[0.5cm]" />
+            @change="currentChange" class="lg:ml-[19cm] mt-[0.5cm] ml-[11.5cm]" />
         <div v-if="isComp" class="mx-auto w-fit mt-[1cm] rounded-md flex gap-[1cm]">
             <a-date-picker v-model:value="tahunPertama" picker="year" placeholder="Tahun Pertama" class="border-black"
                 @change="yearCompareChange"></a-date-picker>

@@ -13,8 +13,8 @@
 </style>
 <template>
     <Navbar class="print:hidden"></Navbar>
-    <div class="flex flex-col gap-[1cm]">
-        <div class="flex flex-wrap justify-between text-center text-black px-[1cm] py-[3cm] h-full print:hidden">
+    <div class="flex flex-col gap-[1cm] w-[17.5cm] lg:w-screen mb-[1cm]">
+        <div class="text-center text-black px-[1cm] py-[3cm] h-full print:hidden flex flex-col lg:flex-row">
             <div>
                 <p class="font-bold text-[30px]">Selamat Datang Di Villa Watusaman</p>
                 <p>Villa Watusaman, Gallery & Resto Bakmijawa</p>
@@ -37,9 +37,9 @@
                         <div class="border h-[10px] rounded-md bg-gray-100"></div>
                         <div class="border h-[10px] w-[4cm] mx-auto rounded-md bg-gray-100 mt-[0.3cm]"></div>
                     </div>
-                    <div class="grid grid-cols-2 w-fit gap-[0.5cm]">
+                    <div class="grid grid-cols-2 w-fit gap-[0.5cm] mx-auto">
                         <div v-for="(data, index) in reservasis" :key="index"
-                            class="flex flex-col w-[9cm] mx-auto border-2 gap-[0.1cm] p-[0.3cm] rounded-md border-red-600 transition-hover">
+                            class="flex flex-col w-[7cm] lg:w-[9cm] mx border-2 gap-[0.1cm] p-[0.3cm] rounded-md border-red-600 transition-hover">
                             <p>{{ data.nama }} [ {{ formattedDate(data.start_date) }} - {{ formattedDate(data.end_date)
                             }} ]
                             </p>
@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div>
-                <p class="font-bold text-[25px] mb-[0.5cm]">KAMAR</p>
+                <p class="font-bold text-[25px] text-center mb-[0.5cm]">KAMAR</p>
                 <div v-if="loading" class="flex gap-[0.4cm] animate-pulse">
                     <div class="flex flex-col w-[6cm]">
                         <div class="w-[6cm] border-2 rounded-xl items-center pb-[0.5cm] py-[0.1cm] ">
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="!loading" class="flex overflow-x-scroll gap-[0.4cm] w-[19cm] snap-x snap-mandatory">
+                <div v-if="!loading" class="flex overflow-x-scroll mx-auto gap-[0.4cm] w-[14.5cm] lg:w-[19cm] snap-x snap-mandatory">
                     <div class="min-w-[6cm] border-2 border-red-600 rounded-xl flex flex-col items-center font-thin pb-[0.5cm] snap-center snap-always"
                         v-for="(data, index) in image" :key="index">
                         <img :src="data.image" class="h-[4cm] p-[0.1cm] rounded-t-xl" />
@@ -148,20 +148,20 @@
                 </div>
             </div>
         </div>
-        <div id="reservasi-section" class="border print:mt-[5cm]">
-            <div class="p-[1cm] w-[25cm] mx-auto">
-                <div class="hidden print:block print:mb-[1cm] w-fit mx-auto">
+        <div id="reservasi-section" class="w-fit print:ml-[1cm] pt-[1.4cm] lg:w-screen">
+            <div class="p-[1cm] print:p-0 lg:w-[25cm] w-[17.5cm] mx-auto ">
+                <div class="hidden print:block print:mb-[1cm] mx-auto w-fit">
                     <p
                         class="my-auto font-bold text-black text-center flex text-[35px] flex-row underline decoration-red-600">
                     <p>Villa</p>
                     <p class="text-red-600">W</p>atusaman</p>
                 </div>
-                <a-steps :current="current" :items="items" class="print:hidden"></a-steps>
-                <a-steps :current="2" :items="items" class="text-center print:block" hidden></a-steps>
+                <a-steps v-if="(print == 'false')" :current="current" :items="items" class="print:hidden"></a-steps>
+                <a-steps v-else-if="(print == 'true')" :current="current" :items="items" hidden></a-steps>
                 <div class="steps-content print:hidden">
                     <component :is="steps[current].component" />
                 </div>
-                <div class="hidden print:block w-[10cm] mx-auto mb-[1cm] mt-[1cm]">
+                <div class="hidden print:block w-[10cm] border-2 mx-auto mb-[1cm]">
                     <div class="mx-auto border border-black p-[0.5cm]">
                         <p class="text-center">FAKTUR RESERVASI VILLA WATUSAMAN</p>
                         <p class="text-center">{{ formattedDate(invoice.start_date) }} - {{ formattedDate(invoice.end_date)
@@ -238,17 +238,17 @@
                 <a-input v-model:value="formProfil.nomorTelepon" placeholder="08..."></a-input>
             </a-form-item>
             <button html-type="submit"
-                class="font-bold  rounded-xl w-[3cm] text-red-600 h-[1cm] mx-auto border-[2px] hover:bg-red-200 border-red-600 transition-all duration-[0.5s]">Ubah</button>
+                class="font-bold  rounded-xl w-[3cm] text-red-600 h-[1cm] mx-auto border-[2px] hover:bg-red-400 hover:text-white border-red-600 transition-all duration-[0.5s]">Ubah</button>
         </a-form>
         <button
-            class="font-bold  mt-[5px] rounded-xl w-[3cm] text-red-600 h-[1cm] mx-auto border-[2px] hover:bg-red-200 border-red-600 transition-all duration-[0.5s]"
+            class="font-bold  mt-[5px] rounded-xl w-[3cm] text-white bg-red-600 h-[1cm] mx-auto border-[2px] hover:bg-red-400 border-red-600 transition-all duration-[0.5s]"
             @click="resetPassword">Ubah Password</button>
         <div v-if="showOtp" class="mt-[0.5cm] w-fit mx-auto">
             <a-form :model="otp" autocomplete="off" @finish="verifOTP">
                 <p class="text-[20px] font-bold mb-[5px]">PIN</p>
                 <PinInput @update:pin="handlePinUpdate"></PinInput>
                 <button type="submit"
-                    class="border-2 border-red-600 rounded-md p-[4px] text-red-600 mt-[5px] hover:bg-red-200">Submit</button>
+                    class="border-2 border-red-600 rounded-md p-[4px] text-white bg-red-600 mt-[20px] hover:bg-red-400">Submit</button>
             </a-form>
         </div>
     </a-modal>
@@ -309,7 +309,8 @@ export default {
             isOpen: ref(false),
             showOtp: ref(false),
             isReset: ref(false),
-            loading: ref(true)
+            loading: ref(true),
+            print: ref(false)
         }
     },
     computed: {
@@ -460,8 +461,10 @@ export default {
                 .then(res => {
                     console.log('RESERVASI CETAK: ', res)
                     this.invoice = res.data.data
+                    this.print = true
                     setTimeout(() => {
                         window.print()
+                        this.print = false
                     }, 1000)
                 })
 
@@ -537,7 +540,11 @@ export default {
                     loadingMessage()
                     console.error(error.response)
                     console.error(error.response.data)
-                    message.error(error.response.data.message, 2)
+                    if(error.response.data.message === 'Attempt to read property "otp" on null') {
+                        message.error('Kode OTP Sudah Hangus!', 2)    
+                    } else {
+                        message.error(error.response.data.message, 2)
+                    }
                 })
         },
         async resetPassword() {

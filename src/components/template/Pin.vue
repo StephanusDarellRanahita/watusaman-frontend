@@ -1,7 +1,7 @@
 <template>
     <div class="flex space-x-2">
         <input v-for="(digit, index) in pin" :key="index" type="text" maxlength="1"
-            class="w-12 h-12 text-center border-2 border-gray-300 rounded" v-model="pin[index]" @input="onInput(index)"
+            class="w-8 h-8 text-center border-2 border-gray-300 rounded lg:h-12 lg:w-12" v-model="pin[index]" @input="onInput(index)"
             @keydown.delete="onDelete(index)" ref="pinInputs" />
     </div>
 </template>

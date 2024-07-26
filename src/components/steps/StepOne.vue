@@ -1,5 +1,5 @@
 <template>
-    <div class="flex mx-auto text-black w-fit gap-[0.5cm] mt-[-1.5cm]">
+    <div class="flex mx-auto w-fit gap-[0.5cm] mt-[-1.5cm]">
         <form v-if="userRes == null" class="p-[0.5cm] flex flex-col gap-[2px] border-2 rounded-xl border-red-600 mb-[0.5cm]"
             @submit.prevent="submitReservasi">
             <div class="font-bold text-left mb-[0.5cm]">
@@ -91,15 +91,15 @@
                     class="mt-[0.2cm] rounded-xl p-[0.2cm] hover:bg-red-200 border border-red-600 text-red-600">Update</button>
             </div>
         </form>
-        <div v-if="condition" class="mt-[1.1cm]">
-            <div :class="check ? 'h-[3cm]' : 'h-fit'" class="p-[0.3cm] border-2 border-yellow-300 overflow-auto rounded-md">
+        <div v-if="condition">
+            <div :class="check ? 'max-h-[13.4cm]' : 'h-fit'" class="p-[0.3cm] border-2 border-red-600 overflow-auto rounded-md">
                 <p :class="check ? 'text-red-600' : 'text-green-400'" class="transition-all duration-500 ease-in-out">{{
                     checkMessage }}</p>
                 <div v-if="check">
                     <p>-----------------</p>
-                    <div class="flex flex-col gap-[0.3cm]">
+                    <div class="flex flex-col py-[0.2cm] gap-[0.3cm]">
                         <button v-for="(date, index) in check" :key="index"
-                            class="border w-fit p-[0.1cm] rounded-xl bg-yellow-200">
+                            class="border w-[3.5cm] lg:w-fit p-[0.2cm]  rounded-xl bg-yellow-200">
                             {{ formatDate(date.start_date) }} - {{ formatDate(date.end_date) }}
                         </button>
                     </div>
