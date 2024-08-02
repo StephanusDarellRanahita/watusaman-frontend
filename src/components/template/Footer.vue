@@ -2,7 +2,7 @@
     <div class="h-fit w-max lg:w-screen bg-black text-white flex flex-col lg:flex-row gap-[1cm] p-[1cm]">
         <div class="flex flex-col text-center gap-[0.2cm]">
             <p class="text-[30px] underline decoration-red-600 font-bold">Villa<a class="text-red-600">W</a>atusaman</p>
-            <button class="hover:ring-[2px] p-[5px] hover:ring-blue-600 mx-auto" @click="mapsClick"><img src="/MapsVilla.jpg" class="h-[8cm]" /></button>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.569546826007!2d110.36181707476653!3d-7.835297992185877!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a57b2fae3748f%3A0x65e7b3b73d603294!2sVilla%20Watusaman%20Jogja!5e0!3m2!1sen!2sid!4v1722407927625!5m2!1sen!2sid" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="mx-auto"></iframe>
         </div>
         <div class="my-auto text-center">
             <p class="font-bold text-[30px]">Villa Watusaman</p>
@@ -36,9 +36,6 @@
 export default {
     nama: 'Footer',
     methods: {
-        mapsClick() {
-            window.open('https://www.google.com/maps/place/Villa+Watusaman+Jogja/@-7.835298,110.3618171,17z/data=!3m1!4b1!4m9!3m8!1s0x2e7a57b2fae3748f:0x65e7b3b73d603294!5m2!4m1!1i2!8m2!3d-7.835298!4d110.364392!16s%2Fg%2F11b63vx693?entry=ttu')
-        },
         instaClick() {
             window.open('https://www.instagram.com/villa.watusaman.jogja/')
         }

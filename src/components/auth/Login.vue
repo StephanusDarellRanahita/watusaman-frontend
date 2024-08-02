@@ -11,10 +11,10 @@
     </Navbar>
     <div class="transition-all duration-500 items-center ease-in-out w-[15cm] lg:px-[1cm] py-[2cm] h-fit flex flex-col lg:flex-row gap-[1cm] lg:gap-[3cm] ml-[1.3cm] lg:ml-[1cm]">
         <div class="flex flex-col">
-            <div class="mx-auto w-[10cm] mt-[1cm] border-2 border-red-600 bg-white text-black  p-[0.5cm] rounded-md font-mono transition-all duration-500"
+            <div class="mx-auto w-[10cm] mt-[1cm] border-2 border-red-600 bg-white text-black p-[0.5cm] rounded-md font-mono transition-all duration-500"
                 :class="isRegister ? 'h-[11cm]' : 'h-[9cm]'">
                 <p class="font-bold text-center text-[40px] w-[8.92cm] transition-all duration-[0.5s]"
-                    :class="isRegister ? ['opacity-0', 'ml-[6cm]'] : ['opacity-100']">LOGIN</p>
+                    :class="isRegister ? ['opacity-0', ''] : ['opacity-100']">LOGIN</p>
                 <p class="font-bold text-center text-[40px] transition-all duration-[0.5s] absolute top-[3.5cm]  "
                     :class="isRegister ? ['opacity-100', 'left-[4.78cm]'] : ['opacity-0', 'left-[3cm]']">REGISTER</p>
                 <div class="border-b-[3px] border-b-red-600 mb-[0.5cm]"></div>
@@ -33,7 +33,7 @@
                             class="font-mono border-2 border-black" />
                     </a-form-item>
                     <button html-type="submit"
-                        class="font-bold  rounded-xl w-[3cm] h-[1cm] mx-auto border-[2px] hover:bg-red-200 border-red-600 transition-all duration-[0.5s] ease-in-out"
+                        class="font-bold  rounded-xl w-[3cm] h-[1cm] mx-auto border-[2px] hover:bg-red-400 hover:text-white text-red-600 border-red-600 transition-all duration-[0.5s] ease-in-out"
                         :class="isRegister ? ['opacity-100', 'mt-[2cm]'] : ['opacity-100',]">Submit</button>
                 </a-form>
                 <a-form class="flex flex-col login-form absolute top-[5.7cm] w-[8.9cm]" :model="formState" autocomplete="off"
@@ -54,7 +54,7 @@
                             class="font-mono border-2 border-black" />
                     </a-form-item>
                     <button html-type="submit"
-                        class="font-bold  rounded-xl w-[3cm] h-[1cm] mx-auto border-[2px] hover:bg-red-200 border-red-600 transition-all duration-[0.5s]"
+                        class="font-bold  rounded-xl w-[3cm] h-[1cm] mx-auto border-[2px] hover:bg-red-400 hover:text-white text-red-600 border-red-600 transition-all duration-[0.5s]"
                         :class="isRegister ? ['opacity-100'] : ['-m-[2cm]']">Submit</button>
                 </a-form>
             </div>
@@ -213,9 +213,9 @@ export default {
                 .catch(async (error) => {
                     loadingMessage()
                     console.error(error.response)
-                    console.error(error.response.data.email)
+                    console.error(error.response.data)
                     this.name = ''; this.email = ''; this.password = ''
-                    message.error(error.response.data.email, 2)
+                    message.error(error.response.data.message, 2)
                 })
         },
         async emailSend() {
@@ -238,7 +238,7 @@ export default {
                 }
             })
                 .then(res => {
-                    console.log(res)
+                    console.log('KAMAR: ',res)
                     this.kamar = res.data.data.data.sort((a, b) => a.nomor_kamar - b.nomor_kamar)
                 })
         },

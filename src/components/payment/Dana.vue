@@ -2,8 +2,7 @@
     <div class=" text-black px-[20px] rounded-md mb-[0.1cm]">
         <p class="mb-[0.5cm] text-start">1. Masukkan Nomor Dana Anda</p>
         <a-form @finish="submitTelepon" :model="form" autocomplete="on" class="text-center">
-            <a-form-item name="nomor" 
-                :rules="[{ required:true, message: 'Silahkan Input Nomor Telepon Dana Anda!' }]">
+            <a-form-item name="nomor" :rules="[{ required: true, message: 'Silahkan Input Nomor Telepon Dana Anda!' }]">
                 <p class="text-[14px]">Nomor Telpon</p>
                 <a-input v-model:value="form.nomor" placeholder="nomor" class="w-[8cm]"></a-input>
             </a-form-item>
@@ -22,7 +21,8 @@
                 </div>
                 <div>
                     <p class="text-[10px] mb-[0.2cm]">JUMLAH KIRIM</p>
-                    <a-input-number v-model:value="dp" placeholder="Rp0" :bordered="false" required :min="min" :max="reservasi.total_harga" class="w-full" :controls="false"></a-input-number>
+                    <a-input-number v-model:value="dp" placeholder="Rp0" :bordered="false" required :min="min"
+                        :max="reservasi.total_harga" class="w-full" :controls="false"></a-input-number>
                 </div>
                 <p class="mx-auto mt-[1cm]">PIN</p>
                 <PinInput @update:pin="handlePinUpdate" class="mx-auto"></PinInput>
@@ -65,7 +65,7 @@ export default {
     methods: {
         ...mapActions(['showAlert', 'hideAlert']),
         async submitTelepon() {
-            const loadingMessage = message.loading('Verifying',0)
+            const loadingMessage = message.loading('Verifikasi...', 0)
             await axios.get(local + `user-dana?nomor_telepon=${this.form.nomor}`, {
                 headers: {
                     Accept: 'application/json'
@@ -76,7 +76,7 @@ export default {
                     console.log(res)
                     this.user = res.data.data
                     this.isOpen = true
-                    message.success(res.data.message,2)
+                    message.success(res.data.message, 2)
                 })
                 .catch(async (error) => {
                     loadingMessage()
@@ -96,13 +96,13 @@ export default {
                 .then(res => {
                     console.log(res)
                     this.reservasi = res.data.data
-                    this.dp = this.reservasi.total_harga/2
+                    this.dp = this.reservasi.total_harga / 2
                     this.min = this.dp
                     console.log('RESERVASI', this.reservasi)
                 })
         },
         async payment() {
-            const loadingMessage = message.loading('Verifying',0)
+            const loadingMessage = message.loading('Memverifikasi...', 0)
             await axios.post(local + 'payment', {
                 id_user: localStorage.getItem('idUser'),
                 id_reservasi: this.reservasi.id,
@@ -119,18 +119,33 @@ export default {
                     loadingMessage()
                     console.log(res)
                     this.isOpen = false
-                    message.success(res.data.message,2)
-                    window.location.reload()
+                    this.sendWhatsApp()
+                    message.success(res.data.message, 2)
+                    setTimeout(()=> {
+                        window.location.reload()  
+                    },2000)
                 })
                 .catch(async (error) => {
                     loadingMessage()
-                    console.error(error.response) 
+                    console.error(error.response)
                     console.error(error.response.data)
                     this.showAlert({ message: error.response.data.message, background: 'bg-red-500', text: 'text-white' })
                     this.isOpen = false
-                    message.error(error.response.data.message,2)
+                    message.error(error.response.data.message, 2)
                 })
-            
+
+        },
+        async sendWhatsApp() {
+            console.log(this.reservasi.nama)
+            await axios.post(local + 'send-whatsapp', {
+                start_date: this.reservasi.start_date,
+                end_date: this.reservasi.end_date,
+                nama: this.reservasi.nama,
+                nomor_telepon: this.reservasi.nomor_telepon,
+                dewasa: this.reservasi.dewasa,
+                anak: this.reservasi.anak,
+                pesan: 'Melakukan Pembayaran Dengan Dana'
+            })
         },
         handlePinUpdate(pin) {
             this.pin = pin
@@ -142,7 +157,7 @@ export default {
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         },
         formattedDate(time) {
-            return moment(time).format('DD MMM YYYY')      
+            return moment(time).format('DD MMM YYYY')
         },
         close() {
             this.isOpen = false

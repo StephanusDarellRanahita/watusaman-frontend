@@ -42,7 +42,7 @@
             </div>
             <div>
                 <button type="submit" class="mt-[0.2cm] rounded-xl p-[0.2cm]"
-                    :class="check ? ['bg-transparent', 'text-gray-400', 'border-2', 'cursor-not-allowed'] : ['bg-red-600', 'text-white', 'hover:ring-[2px]', 'hover:ring-red-600', 'hover:bg-red-200', 'hover:text-red-600']"
+                    :class="check ? ['bg-transparent', 'text-gray-400', 'border-2', 'cursor-not-allowed'] : ['bg-red-600', 'text-white', 'hover:ring-[2px]', 'hover:ring-red-600', 'hover:bg-red-400', 'font-bold']"
                     :disabled="check">Reservasi</button>
             </div>
         </form>
@@ -88,18 +88,19 @@
             </div>
             <div>
                 <button type="submit"
-                    class="mt-[0.2cm] rounded-xl p-[0.2cm] hover:bg-red-200 border border-red-600 text-red-600">Update</button>
+                    class="mt-[0.2cm] rounded-xl p-[0.2cm] hover:bg-red-200 border border-red-600 text-red-600">Ubah</button>
             </div>
         </form>
         <div v-if="condition">
-            <div :class="check ? 'max-h-[13.4cm]' : 'h-fit'" class="p-[0.3cm] border-2 border-red-600 overflow-auto rounded-md">
+            <div :class="check ? 'max-h-[13.4cm]' : 'h-fit'"
+                class="p-[0.3cm] border-2 border-red-600 overflow-auto rounded-md">
                 <p :class="check ? 'text-red-600' : 'text-green-400'" class="transition-all duration-500 ease-in-out">{{
                     checkMessage }}</p>
                 <div v-if="check">
                     <p>-----------------</p>
                     <div class="flex flex-col py-[0.2cm] gap-[0.3cm]">
                         <button v-for="(date, index) in check" :key="index"
-                            class="border w-[3.5cm] lg:w-fit p-[0.2cm]  rounded-xl bg-yellow-200">
+                            class="border w-[3.5cm] lg:w-[6cm] p-[0.2cm]  rounded-xl bg-yellow-200">
                             {{ formatDate(date.start_date) }} - {{ formatDate(date.end_date) }}
                         </button>
                     </div>
@@ -129,6 +130,7 @@ export default {
             check: [],
             checkMessage: {},
             userRes: {},
+            user: {},
             jumlahHari: 0,
             jumlahHariRecord: 0,
             input: {
@@ -194,11 +196,27 @@ export default {
     },
     mounted() {
         this.recordRes()
+        this.getData()
     },
     methods: {
         ...mapActions(['reservasi', 'showAlert', 'hideAlert']),
+        async getData() {
+            const id = localStorage.getItem('idUser')
+            await axios.get(local + `users/${id}`,{
+                headers: {
+                    Accept: 'application/json'
+                }
+            })
+                .then(res => {
+                    console.log(res)
+                    this.user = res.data.data
+                    
+                    this.input.nama = this.user.name
+                    this.input.noTelp = this.user.nomor_telepon
+                })
+        },
         async submitReservasi() {
-            const loadingMessage = message.loading('Verifying', 0)
+            const loadingMessage = message.loading('Mencatat Data Reservasi...', 0)
             await axios.post(local + `reservasi/${localStorage.getItem('idUser')}`, {
                 start_date: this.input.startDate,
                 end_date: this.input.endDate,
@@ -218,7 +236,6 @@ export default {
                     this.reservasi()
                     localStorage.setItem('idReservasi', res.data.data.reservasi.id)
                     console.log('res', localStorage.getItem('idReservasi'))
-                    this.sendWhatsApp()
                     this.recTanggal = { ...this.tanggal }
                     this.recordRes()
                     this.input.anak = 0
@@ -228,36 +245,19 @@ export default {
                     this.input.noTelp = ''
                     this.input.startDate = ''
                     message.success(res.data.message, 2)
-                    setTimeout(() => {
-                        window.location.reload()
-                    },1000)
                 })
                 .catch(async (error) => {
                     loadingMessage()
-                    console.error(error.response)
+                    console.error(error)
                     console.error(error.response.data.message)
-                    if (error.response.data.message.nomor_telepon) {
-                        message.error(error.response.data.message.nomor_telepon[0], 2)
-                    } else {
-                        console.log('DEWASA')
-                        loadingMessage()
-                        this.showAlert({ message: error.response.data.message, background: 'bg-red-500', text: 'text-white' })
-                        message.error(error.response.data.message, 2)
-                    }
-
+                    message.error(error.response.data.message, 2)
                 })
         },
         async updateReservasi() {
             const id = localStorage.getItem('idUser')
             const date = this.userRes.start_date
-            const loadingMessage = message.loading('Updating', 0)
-            await axios.put(local + `reservasi/${id}/${date}`, {
-                dewasa: this.userRes.dewasa,
-                anak: this.userRes.anak,
-                nomor_telepon: this.userRes.nomor_telepon,
-                nama: this.userRes.nama,
-                total_harga: this.userRes.total_harga
-            }, {
+            const loadingMessage = message.loading('Mengubah Data...', 0)
+            await axios.put(local + `reservasi/${id}/${date}?dewasa=${this.userRes.dewasa}&anak=${this.userRes.anak}&nomor_telepon=${this.userRes.nomor_telepon}&nama=${this.userRes.nama}&total_harga=${this.userRes.total_harga}`, {}, {
                 headers: {
                     Accept: 'application/json'
                 }
@@ -265,15 +265,16 @@ export default {
                 .then(async (res) => {
                     loadingMessage()
                     console.log(res)
-                    console.log(res.data.message)
-                    this.showAlert({ message: res.data.message, background: 'bg-green-300', text: 'text-black' })
                     message.success(res.data.message, 2)
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 2000)
                 })
                 .catch(async (error) => {
                     loadingMessage()
                     console.error(error.response)
                     console.error(error.response.data)
-                    message.error(error.response.data.message)
+                    message.error(error.response.data.message, 2)
                 })
         },
         async recordRes() {
@@ -308,23 +309,17 @@ export default {
                 .then(res => {
                     console.log(res)
                     this.checkMessage = res.data.message
-                    this.check = res.data.data
+                    if (!res.data.data) {
+                        this.check = res.data.data
+                    } else {
+                        this.check = res.data.data.sort((a, b) => new Date(a.start_date) - new Date(b.start_date))
+                    }
                     this.condition = true
                 })
                 .catch((error) => {
                     console.error(error.response)
                     console.error(error.response.data)
                 })
-        },
-        async sendWhatsApp() {
-            await axios.post(local + 'send-whatsapp', {
-                start_date: this.input.startDate,
-                end_date: this.input.endDate,
-                nama: this.input.nama,
-                nomor_telepon: this.input.noTelp,
-                dewasa: this.input.dewasa,
-                anak: this.input.anak
-            })
         },
         hari() {
             if (this.input.startDate && this.input.endDate) {
