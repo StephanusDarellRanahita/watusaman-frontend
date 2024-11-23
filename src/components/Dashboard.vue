@@ -7,7 +7,7 @@
 }
 
 .transition-hover:hover {
-    height: 8cm;
+    height: 8.5cm;
     /* Change height on hover */
 }
 </style>
@@ -42,7 +42,7 @@
                         <div :class="!loading ? '' : 'hidden'" class="flex flex-col justify-between">
                             <p class="font-bold text-[25px]">DAFTAR RESERVASI</p>
                             <div
-                                class="grid grid-cols-2 w-fit gap-[0.5cm] mx-auto border-t-2 border-red-600 border-b-2 rounded-md py-[10px] h-[7cm] overflow-auto">
+                                class="grid grid-cols-2 w-fit gap-[0.5cm] mx-auto border-t-2 border-red-600 border-b-2 rounded-md py-[10px] h-[6.2cm] overflow-auto">
                                 <div v-for="(data, index) in reservasis" :key="index"
                                     class="flex flex-col w-[7cm] lg:w-[9cm] mx border-2 gap-[0.1cm] p-[0.3cm] rounded-md border-red-600 transition-hover">
                                     <p>{{ data.nama }} [ {{ formattedDate(data.start_date) }} - {{
@@ -54,7 +54,7 @@
                                     <p v-else-if="data.sisa_pembayaran != 0 && data.status == 'SELESAI'"
                                         class="mb-[0.3cm] font-bold text-yellow-400">Status [ DP ]</p>
                                     <p v-else
-                                        :class="data.status == 'PEMBAYARAN' ? ['text-red-600', 'font-bold'] : ['text-red-400', 'font-bold']"
+                                        :class="data.status == 'PEMBAYARAN' ? ['text-red-600', 'font-bold'] : data.status == 'KONFIRMASI PEMBAYARAN' ? ['text-red-600', 'mb-0'] : ['text-red-400', 'font-bold']"
                                         class="mb-[0.3cm] font-bold text-green-500">Status [ {{ data.status }} ]</p>
                                     <p>-------------------------------------</p>
                                     <div class="text-left">
@@ -71,11 +71,17 @@
                                     <div class="mx-auto w-fit mb-[1cm] flex gap-[0.5cm]">
                                         <button
                                             :class="data.status == 'BATAL' ? ['hidden'] : ['border-red-600', 'hover:bg-red-400']"
-                                            class="border-2  rounded-md p-[4px] text-red-600 hover:text-white hover:font-bold"
+                                            class="border-2  rounded-md p-[4px text-red-600 hover:text-white hover:font-bold"
                                             @click="cetak(data.id)">Cetak</button>
-                                        <button
+                                        <button v-if="!harimindua(data.start_date)"
                                             :class="data.status == 'BATAL' ? ['hidden'] : harimindua(data.start_date) ? ['border-gray-500', 'bg-gray-300', 'text-gray-500', 'cursor-not-allowed'] : ['border-red-600', 'hover:bg-red-400', 'bg-red-600', 'text-white']"
                                             class="font-boldp-[4px] rounded-md p-[4px] border-2" @click="cancel(data.id)">
+                                            Batal
+                                        </button>
+                                        <button v-else
+                                            :class="data.status == 'BATAL' ? ['hidden'] : harimindua(data.start_date) ? ['border-gray-500', 'bg-gray-300', 'text-gray-500', 'cursor-not-allowed'] : ['border-red-600', 'hover:bg-red-400', 'bg-red-600', 'text-white']"
+                                            class="font-boldp-[4px] rounded-md p-[4px] border-2" @click="cancel(data.id)"
+                                            disabled>
                                             Batal
                                         </button>
                                     </div>
@@ -168,7 +174,7 @@
             <Review />
         </div>
         <div id="info-section" class="mt-[2cm] h-[10cm] w-full lg:w-screen print:hidden">
-            <div class="h-[6cm] bg-gradient-to-r from-red-600 from-50% to-white text-white font-bold p-[10px]">
+            <div class="h-[7cm] bg-gradient-to-r from-red-600 from-50% to-white text-white font-bold p-[10px]">
                 <div>
                     <p class="text-[20px]">Fasilitas Villa Watusaman</p>
                     <div class="h-[3px] bg-gradient-to-r from-white from-50% to-red-600"></div>
@@ -242,9 +248,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="flex flex-col lg:flex-row lg:gap-[5px] mt-[15px]">
+                    <p class="font-normal ">Harga sewa mulai dari Rp 1.250.000</p>
+                    <p class="font-normal ">5 kamar | 10 pax | Maks 30 pax</p>
+                </div>
             </div>
             <a-carousel dot-position="left" autoplay="true"
-                class="relative w-[8cm] lg:w-[15cm] bottom-[7.1cm] lg:bottom-[8cm] left-[9.5cm] lg:left-[25.7cm] rounded-tl-md rounded-bl-md ring-[5px] ring-red-600 ring-offset-4 bg-gray-500">
+                class="relative w-[8cm] lg:w-[15cm] bottom-[7.55cm] lg:bottom-[8.5cm] left-[9.5cm] lg:left-[25.7cm] rounded-tl-md rounded-bl-md ring-[5px] ring-red-600 ring-offset-4 bg-gray-500">
                 <span v-for="(image, index) in imageFasilitas" :key="index">
                     <img :src="image" class="lg:h-[10cm] h-[8cm] rounded-tl-md rounded-bl-md" />
                 </span>
@@ -305,42 +315,45 @@
                         Selesai
                     </button>
                     <button v-if="current > 0 && current != 2" style="margin-left: 8px" @click="prev"
-                        class="border border-red-600 p-[5px] rounded-md text-red-600 hover:bg-red-200">Previous</button>
+                        class="border border-red-600 p-[5px] rounded-md text-red-600 hover:bg-red-200">Kembali</button>
                 </div>
             </div>
         </div>
     </div>
     <Footer class="print:hidden">
     </Footer>
-    <a-modal v-model:open="isReset" title="Ubah Pasword" class="text-center" :footer="null">
+    <a-modal v-model:open="isReset" title="Ubah Kata Sandi" class="text-center" :footer="null">
         <a-form :model="formReset" autocomplete="off" @finish="updatePassword">
             <a-form-item name="oldPassword"
-                :rules="[{ required: true, message: 'Password Tidak Boleh Kosong' }, { min: 3, message: 'Password Minimal 3 Digit!' }]">
-                <a-input-password v-model:value="formReset.oldPassword" placeholder="Old Password"></a-input-password>
+                :rules="[{ required: true, message: 'Kata Sandi Tidak Boleh Kosong' }, { min: 3, message: 'Kata Sandi Minimal 3 Karakter!' }]">
+                <a-input-password v-model:value="formReset.oldPassword" placeholder="Kata Sandi Lama"
+                    class="text-[20px]"></a-input-password>
             </a-form-item>
             <a-form-item name="newPassword"
-                :rules="[{ required: true, message: 'Password Tidak Boleh Kosong' }, { min: 3, message: 'Password Minimal 3 Digit!' }]">
-                <a-input-password v-model:value="formReset.newPassword" placeholder="New Password"
-                    class="mt-[0.5cm]"></a-input-password>
+                :rules="[{ required: true, message: 'Kata Sandi Tidak Boleh Kosong' }, { min: 3, message: 'Password Minimal 3 Karakter!' }]">
+                <a-input-password v-model:value="formReset.newPassword" placeholder="Kata Sandi Baru"
+                    class="mt-[0.5cm] text-[20px]"></a-input-password>
+                <p class="text-gray-400">*Mengandung huruf besar, huruf kecil, dan angka</p>
             </a-form-item>
             <button type="submit"
-                class="border-2 border-red-600 rounded-md p-[4px] text-red-600 mt-[5px] hover:bg-red-200">Submit</button>
+                class="border-2 border-red-600 rounded-md p-[4px] text-red-600 mt-[5px] hover:bg-red-200">Ubah</button>
         </a-form>
     </a-modal>
-    <a-modal v-model:open="isOpen" title="Profil" class="text-center" :footer="null" @cancel="closeOTP">
+    <a-modal v-model:open="isOpen" title="Profil" class="text-center" width="20cm" :footer="null" @cancel="closeOTP">
         <a-form :model="formProfil" autocomplete="off" @finish="updateProfil">
             <a-form-item name="name" :rules="[{ required: true, message: 'Nama Tidak Boleh Kosong' }]">
-                <p class="ml-[4px] font-mono text-left">Nama</p>
-                <a-input v-model:value="formProfil.name" placeholder="Nama"></a-input>
+                <p class="ml-[4px] font-mono text-left text-[20px]">Nama</p>
+                <a-input v-model:value="formProfil.name" placeholder="Nama" class="text-[20px]"></a-input>
             </a-form-item>
             <a-form-item name="email"
                 :rules="[{ required: true, message: 'Nama Tidak Boleh Kosong' }, { type: 'email', message: 'Input Email Yang Valid' }]">
-                <p class="ml-[4px] font-mono text-left">Email</p>
-                <a-input v-model:value="formProfil.email" placeholder="Email" :disabled="true"></a-input>
+                <p class="ml-[4px] font-mono text-left text-[20px]">Email</p>
+                <a-input v-model:value="formProfil.email" placeholder="Email" :disabled="true"
+                    class="text-[20px]"></a-input>
             </a-form-item>
             <a-form-item name="nomorTelepon" :rules="[{ required: true, message: 'Nomor Tidak Boleh Kosong' }]">
-                <p class="ml-[4px] font-mono text-left">Nomor Telepon</p>
-                <a-input v-model:value="formProfil.nomorTelepon" placeholder="08..."></a-input>
+                <p class="ml-[4px] font-mono text-left text-[20px]">Nomor Telepon</p>
+                <a-input v-model:value="formProfil.nomorTelepon" placeholder="08..." class="text-[20px]"></a-input>
             </a-form-item>
             <button html-type="submit"
                 class="font-bold  rounded-xl w-[3cm] text-red-600 h-[1cm] mx-auto border-[2px] hover:bg-red-400 hover:text-white border-red-600 transition-all duration-[0.5s]">Ubah</button>
@@ -378,7 +391,12 @@ import StepOne from './steps/StepOne.vue'
 import StepTwo from './steps/StepTwo.vue'
 import StepThree from './steps/StepThree.vue'
 import Review from './template/Review.vue'
+
 import moment from 'moment';
+import 'moment/locale/id'
+
+moment.locale('id')
+
 import PinInput from './template/Pin.vue'
 import Footer from './template/Footer.vue'
 import { message } from 'ant-design-vue';
@@ -423,7 +441,7 @@ export default {
             showOtp: ref(false),
             isReset: ref(false),
             loading: ref(true),
-            print: ref(false)
+            print: ref(false),
         }
     },
     computed: {
@@ -487,7 +505,6 @@ export default {
                 }
             })
                 .then(res => {
-                    console.log(res)
                     this.user = res.data.data
                     this.formProfil.name = this.user.name
                     this.formProfil.email = this.user.email
@@ -499,14 +516,14 @@ export default {
                     console.error(error.response.data)
                 })
 
-            await axios.get(local + `reservasi-user/${id}`, {
+            axios.get(local + `reservasi-user/${id}`, {
                 headers: {
                     Accept: 'application/json'
                 }
             })
                 .then(res => {
-                    console.log(res)
                     this.userRes = res.data.data
+                    console.log('HELLO', this.userRes)
                     this.checkStatusRes()
                 })
                 .catch((error) => {
@@ -611,7 +628,7 @@ export default {
             })
                 .then(res => {
                     loadingMessage()
-                    if (res.data.message == 'Password Tidak Sesuai!') {
+                    if (res.data.message == 'Kata Sandi Tidak Sesuai!') {
                         message.error(res.data.message, 2)
                     } else {
                         this.isReset = false
@@ -733,14 +750,15 @@ export default {
                 } else if (this.userRes[i].status === 'INVOICE') {
                     console.log('RES INVOICE: ', this.userRes[i].status)
                     this.current = 2
-                    break;
+                    break
                 } else {
                     this.current = 0
                 }
             }
         }, //Step Ant Design Vue
-        async next() {
-            if (this.isInputResValid) {
+        next() {
+            console.log('USER RES 2: ', this.userRes)
+            if (this.userRes.length != 0) {
                 this.current++
                 this.getReservasi()
             } else {

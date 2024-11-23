@@ -7,7 +7,14 @@ import  store from './store'
 //import router
 import router from './router'
 import Antd from 'ant-design-vue'
-import moment from 'moment'
+
+import moment from 'moment/dist/moment'
+import id  from 'moment/dist/locale/id'
+
+moment.locale('id', id)
+
+console.log('Locale set to:', moment.locale()) 
+
 //import ApexCharts
 import VueApexCharts from 'vue3-apexcharts'
 

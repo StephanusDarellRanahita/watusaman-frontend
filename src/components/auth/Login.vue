@@ -3,69 +3,71 @@
         <button v-if="!isLoggedIn" class="my-auto" @click="admin">Admin</button>
         <button v-if="!isLoggedIn"
             :class="isRegister ? ['text-white'] : ['text-red-600', 'border-b', 'border-b-red-600', 'text-[25px]']"
-            class="my-auto transition-all duration-500" @click="loginClick">Login
+            class="my-auto transition-all duration-500" @click="loginClick">Masuk
         </button>
         <button v-if="!isLoggedIn"
             :class="isRegister ? ['text-red-600', 'border-b', 'border-b-red-600', 'text-[25px]'] : ['text-white']"
-            class="my-auto transition-all duration-500" @click="registerClick">Register</button>
+            class="my-auto transition-all duration-500" @click="registerClick">Registrasi</button>
     </Navbar>
     <div class="transition-all duration-500 items-center ease-in-out w-[15cm] lg:px-[1cm] py-[2cm] h-fit flex flex-col lg:flex-row gap-[1cm] lg:gap-[3cm] ml-[1.3cm] lg:ml-[1cm]">
         <div class="flex flex-col">
             <div class="mx-auto w-[10cm] mt-[1cm] border-2 border-red-600 bg-white text-black p-[0.5cm] rounded-md font-mono transition-all duration-500"
                 :class="isRegister ? 'h-[11cm]' : 'h-[9cm]'">
                 <p class="font-bold text-center text-[40px] w-[8.92cm] transition-all duration-[0.5s]"
-                    :class="isRegister ? ['opacity-0', ''] : ['opacity-100']">LOGIN</p>
+                    :class="isRegister ? ['opacity-0', ''] : ['opacity-100']">MASUK</p>
                 <p class="font-bold text-center text-[40px] transition-all duration-[0.5s] absolute top-[3.5cm]  "
-                    :class="isRegister ? ['opacity-100', 'left-[4.78cm]'] : ['opacity-0', 'left-[3cm]']">REGISTER</p>
+                    :class="isRegister ? ['opacity-100', 'lg:left-[4.2cm]', 'left-[6.1cm]'] : ['opacity-0', 'left-[3cm]']">REGISTRASI</p>
                 <div class="border-b-[3px] border-b-red-600 mb-[0.5cm]"></div>
                 <a-form :class="isRegister ? 'opacity-0' : ['opacity-100', 'z-30']" :model="formState" autocomplete="off"
                     @finish="loginSubmit" class="flex flex-col font-mono login-form">
                     <a-form-item name="email"
-                        :rules="[{ required: true, message: 'Email Tidak Boleh Kosong!' }, { type: 'email', message: 'Input Email Yang Valid!' }]">
-                        <p class="ml-[4px] font-mono">Email</p>
-                        <a-input type="email" v-model:value="formState.email" placeholder="Email"
+                        :rules="[{ required: true, message: 'Surel Tidak Boleh Kosong!' }, { type: 'email', message: 'Input Surel Yang Valid!' }]">
+                        <p class="ml-[4px] font-mono">Surel</p>
+                        <a-input type="email" v-model:value="formState.email" placeholder="Surel"
                             class="font-mono border-2 border-black" />
                     </a-form-item>
                     <a-form-item name="password"
-                        :rules="[{ required: true, message: 'Password Tidak Boleh Kosong!' }, { min: 3, message: 'Password Minimal 3 Digit!' }]">
-                        <p class="ml-[4px]">Password</p>
-                        <a-input-password v-model:value="formState.password" placeholder="Password"
+                        :rules="[{ required: true, message: 'Kata Sandi Tidak Boleh Kosong!' }, { min: 3, message: 'Kata Sandi Minimal 3 Digit!' }]">
+                        <p class="ml-[4px]">Kata Sandi</p>
+                        <a-input-password v-model:value="formState.password" placeholder="Kata Sandi"
                             class="font-mono border-2 border-black" />
                     </a-form-item>
                     <button html-type="submit"
                         class="font-bold  rounded-xl w-[3cm] h-[1cm] mx-auto border-[2px] hover:bg-red-400 hover:text-white text-red-600 border-red-600 transition-all duration-[0.5s] ease-in-out"
-                        :class="isRegister ? ['opacity-100', 'mt-[2cm]'] : ['opacity-100',]">Submit</button>
+                        :class="isRegister ? ['opacity-100', 'mt-[2cm]'] : ['opacity-100',]">Masuk</button>
                 </a-form>
                 <a-form class="flex flex-col login-form absolute top-[5.7cm] w-[8.9cm]" :model="formState" autocomplete="off"
                     @finish="registSubmit" :class="isRegister ? 'opacity-100' : ['opacity-0', '-z-20']">
                     <a-form-item name="name" :rules="[{ required: true, message: 'Nama Tidak Boleh Kosong!' }]">
                         <p class="ml-[4px] font-mono">Nama</p>
-                        <a-input v-model:value="formState.name" placeholder="Nama" class="font-mono border-2 border-black" />
+                        <a-input v-model:value="formState.name" placeholder="Nama Sesuai KTP" class="font-mono border-2 border-black" />
+                        <p class="text-gray-400">*Harap isi nama sesuai dengan ktp</p>
                     </a-form-item>
                     <a-form-item name="email"
-                        :rules="[{ required: true, message: 'Email Tidak Boleh Kosong!' }, { type: 'email', message: 'Input Email Yang Valid!' }]">
-                        <p class="ml-[4px] font-mono">Email</p>
-                        <a-input v-model:value="formState.email" placeholder="Email" class="font-mono border-2 border-black" />
+                        :rules="[{ required: true, message: 'Surel Tidak Boleh Kosong!' }, { type: 'email', message: 'Masukkan Surel Yang Valid!' }]">
+                        <p class="ml-[4px] font-mono">Surel</p>
+                        <a-input v-model:value="formState.email" placeholder="Surel" class="font-mono border-2 border-black" />
                     </a-form-item>
                     <a-form-item name="password"
-                        :rules="[{ required: true, message: 'Password Tidak Boleh Kosong!' }, { min: 3, message: 'Password Minimal 3 Digit!' }]">
-                        <p class="ml-[4px] font-mono">Password</p>
-                        <a-input-password v-model:value="formState.password" placeholder="Password"
+                        :rules="[{ required: true, message: 'Kata Sandi Tidak Boleh Kosong!' }, { min: 3, message: 'Kata Sandi Minimal 3 Angka!' }]">
+                        <p class="ml-[4px] font-mono h-fit">Kata Sandi</p>
+                        <a-input-password v-model:value="formState.password" placeholder="Kata Sandi"
                             class="font-mono border-2 border-black" />
+                        <p class="text-gray-400">*Mengandung huruf besar, huruf kecil, dan angka</p>
                     </a-form-item>
                     <button html-type="submit"
-                        class="font-bold  rounded-xl w-[3cm] h-[1cm] mx-auto border-[2px] hover:bg-red-400 hover:text-white text-red-600 border-red-600 transition-all duration-[0.5s]"
-                        :class="isRegister ? ['opacity-100'] : ['-m-[2cm]']">Submit</button>
+                        class="font-bold  rounded-xl w-[3cm] -mt-[0.5cm] h-[1cm] mx-auto border-[2px] hover:bg-red-400 hover:text-white text-red-600 border-red-600 transition-all duration-[0.5s]"
+                        :class="isRegister ? ['opacity-100'] : ['-mt-[2cm]']">Daftar</button>
                 </a-form>
             </div>
-            <button @click="scrollToFooter" class="container border border-red-600 mt-[0.5cm] rounded-md w-[7.5cm] mx-auto flex p-[0.2cm] hover:bg-red-300 transition-all duration-500">
+            <button @click="scrollToFooter" class="container border border-red-600 mt-[2cm] rounded-md w-[7.5cm] mx-auto flex p-[0.2cm] hover:bg-red-300 transition-all duration-500">
                 <svg-icon type="mdi" :path="path.mdiGoogleMaps"></svg-icon>
                 <p class="text-[14px] ml-[4px] font-bold mt-[2px]">VILLA WATUSAMAN YOGYAKARTA</p>
             </button>
             <button @click="scrollToFooter" class="container border border-red-600 mt-[0.5cm] rounded-md w-[7.5cm] mx-auto flex p-[0.2cm] hover:bg-red-300 transition-all duration-500">
                 <div class="flex mx-auto gap-[0.2cm]">
                     <svg-icon type="mdi" class="w-[20px]" :path="path.mdiPhoneClassic"></svg-icon>
-                    <p class="text-[14px] font-bold mt-[2px]">CONTACT</p>
+                    <p class="text-[14px] font-bold mt-[2px]">KONTAK</p>
                 </div>
             </button>
         </div>
@@ -90,7 +92,7 @@
     <Footer id="footer-section">
         
     </Footer>
-    <a-modal v-model:open="isOpen" title="PIN" class="text-center" @ok="loginAdmin">
+    <a-modal v-model:open="isOpen" title="PIN" class="text-center" @ok="loginAdmin" cancelText="Batal">
         <PinInput @update:pin="handlePinUpdate" class="mx-auto w-fit"></PinInput>
     </a-modal>
 </template>
@@ -138,7 +140,7 @@ export default {
     methods: {
         ...mapActions(['login', 'showAlert', 'hideAlert']),
         async loginSubmit() {
-            const loadingMessage =  message.loading('Verifying', 0)
+            const loadingMessage =  message.loading('Verifikasi...', 0)
             await axios.post(local + 'login', {
                 email: this.formState.email,
                 password: this.formState.password
@@ -165,7 +167,7 @@ export default {
                 })
         },
         async loginAdmin() {
-            const loadingMessage = message.loading('Verifying', 0)
+            const loadingMessage = message.loading('Verifikasi...', 0)
             await axios.post(local + `login-admin/${this.pin}`, {}, {
                 headers: {
                     Accept: 'application/json'

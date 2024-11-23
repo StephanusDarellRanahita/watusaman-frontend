@@ -12,7 +12,7 @@
         </div>
         <div class="flex flex-col border-2 rounded-md lg:border-l lg:border-0 lg:rounded-none">
             <div class="lg:ml-[1cm] gap-[0.5cm] text-center lg:text-left">
-                <p class="text-[20px] underline underline-offset-4">Contact</p>
+                <p class="text-[20px] underline underline-offset-4">Kontak</p>
                 <button class="flex gap-[10px] mx-auto" @click="instaClick">
                     <svg xmlns="http://www.w3.org/2000/svg" class="fill-red-600 h-[20px] mt-[0.5cm]" viewBox="0 0 24 24">
                         <title>instagram</title>

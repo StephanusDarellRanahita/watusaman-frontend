@@ -156,9 +156,6 @@ export default {
             }
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         },
-        formattedDate(time) {
-            return moment(time).format('DD MMM YYYY')
-        },
         close() {
             this.isOpen = false
         }

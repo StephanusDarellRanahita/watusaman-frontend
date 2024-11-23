@@ -2,58 +2,126 @@
     <Navbar class="print:hidden"></Navbar>
     <div class="pt-[3cm] w-fit px-[0.5cm] lg:w-full">
         <div class="flex flex-col mx-auto w-fit gap-[0.5cm] print:hidden">
-            <div class="flex justify-between">
-                <div class="flex gap-[1cm]">
-                    <a-input v-model:value="searchQuery" class="w-fit" placeholder="cari nama, nomor telepon..."></a-input>
-                    <a-date-picker v-model:value="tahun" picker="year" @change="yearChange"></a-date-picker>
+            <div class="flex h-[1cm] justify-between w-[22.2cm] lg:w-[25cm]">
+                <div class="flex gap-[10px] h-full">
+                    <a-form :model="statusQuery" autocomplete="off" @finish="filterStatus" class="w-fit flex gap-[10px]">
+                        <a-form-item class="w-[6cm]">
+                            <a-select v-model:value="statusQuery" placeholder="Cari status">
+                                <a-select-option value="PEMBAYARAN">PEMBAYARAN</a-select-option>
+                                <a-select-option value="KONFIRMASI PEMBAYARAN">KONFIRMASI PEMBAYARAN</a-select-option>
+                                <a-select-option value="PERMINTAAN BATAL">PERMINTAAN BATAL</a-select-option>
+                                <a-select-option value="BATAL">BATAL</a-select-option>
+                                <a-select-option value="INVOICE">INVOICE</a-select-option>
+                                <a-select-option value="SELESAI">SELESAI</a-select-option>
+                            </a-select>
+                        </a-form-item>
+                        <button type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                class="h-[20px] mx-auto hover:fill-red-600 -mt-[4px]">
+                                <title>search-web</title>
+                                <path
+                                    d="M15.5,14L20.5,19L19,20.5L14,15.5V14.71L13.73,14.43C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.43,13.73L14.71,14H15.5M9.5,4.5L8.95,4.53C8.71,5.05 8.34,5.93 8.07,7H10.93C10.66,5.93 10.29,5.05 10.05,4.53C9.87,4.5 9.69,4.5 9.5,4.5M13.83,7C13.24,5.97 12.29,5.17 11.15,4.78C11.39,5.31 11.7,6.08 11.93,7H13.83M5.17,7H7.07C7.3,6.08 7.61,5.31 7.85,4.78C6.71,5.17 5.76,5.97 5.17,7M4.5,9.5C4.5,10 4.58,10.53 4.73,11H6.87L6.75,9.5L6.87,8H4.73C4.58,8.47 4.5,9 4.5,9.5M14.27,11C14.42,10.53 14.5,10 14.5,9.5C14.5,9 14.42,8.47 14.27,8H12.13C12.21,8.5 12.25,9 12.25,9.5C12.25,10 12.21,10.5 12.13,11H14.27M7.87,8L7.75,9.5L7.87,11H11.13C11.21,10.5 11.25,10 11.25,9.5C11.25,9 11.21,8.5 11.13,8H7.87M9.5,14.5C9.68,14.5 9.86,14.5 10.03,14.47C10.28,13.95 10.66,13.07 10.93,12H8.07C8.34,13.07 8.72,13.95 8.97,14.47L9.5,14.5M13.83,12H11.93C11.7,12.92 11.39,13.69 11.15,14.22C12.29,13.83 13.24,13.03 13.83,12M5.17,12C5.76,13.03 6.71,13.83 7.85,14.22C7.61,13.69 7.3,12.92 7.07,12H5.17Z" />
+                            </svg>
+                        </button>
+                    </a-form>
+                    <a-form :model="namaQuery" autocomplete="off" @finish="filterNama" class="flex flex-row gap-[10px]">
+                        <a-form-item>
+                            <a-input v-model:value="namaQuery" placeholder="Cari nama"></a-input>
+                        </a-form-item>
+                        <button type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                class="h-[20px] mx-auto hover:fill-red-600 -mt-[4px]">
+                                <title>search-web</title>
+                                <path
+                                    d="M15.5,14L20.5,19L19,20.5L14,15.5V14.71L13.73,14.43C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.43,13.73L14.71,14H15.5M9.5,4.5L8.95,4.53C8.71,5.05 8.34,5.93 8.07,7H10.93C10.66,5.93 10.29,5.05 10.05,4.53C9.87,4.5 9.69,4.5 9.5,4.5M13.83,7C13.24,5.97 12.29,5.17 11.15,4.78C11.39,5.31 11.7,6.08 11.93,7H13.83M5.17,7H7.07C7.3,6.08 7.61,5.31 7.85,4.78C6.71,5.17 5.76,5.97 5.17,7M4.5,9.5C4.5,10 4.58,10.53 4.73,11H6.87L6.75,9.5L6.87,8H4.73C4.58,8.47 4.5,9 4.5,9.5M14.27,11C14.42,10.53 14.5,10 14.5,9.5C14.5,9 14.42,8.47 14.27,8H12.13C12.21,8.5 12.25,9 12.25,9.5C12.25,10 12.21,10.5 12.13,11H14.27M7.87,8L7.75,9.5L7.87,11H11.13C11.21,10.5 11.25,10 11.25,9.5C11.25,9 11.21,8.5 11.13,8H7.87M9.5,14.5C9.68,14.5 9.86,14.5 10.03,14.47C10.28,13.95 10.66,13.07 10.93,12H8.07C8.34,13.07 8.72,13.95 8.97,14.47L9.5,14.5M13.83,12H11.93C11.7,12.92 11.39,13.69 11.15,14.22C12.29,13.83 13.24,13.03 13.83,12M5.17,12C5.76,13.03 6.71,13.83 7.85,14.22C7.61,13.69 7.3,12.92 7.07,12H5.17Z" />
+                            </svg>
+                        </button>
+                    </a-form>
+                    <button @click="getReservasi"
+                        class="text-center bg-green-600 border-2 border-green-600 p-[5px] rounded-md text-white hover:bg-green-400">
+                        Semua Data
+                    </button>
+                    <a-date-picker v-model:value="tahun" picker="year" @change="yearChange"
+                        placeholder="Tahun"></a-date-picker>
                 </div>
                 <p class="mt-auto font-bold text-[20px]">DAFTAR RESERVASI</p>
             </div>
-            <table class="order-2 w-[25cm]">
-                <thead>
-                    <tr>
-                        <th v-for="(column, index) in columns" :key="index"
-                            class="border-2 p-[0.1cm] border-red-600 bg-red-300">
-                            {{ column.title }}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(data, index) in filteredReservasi" :key="index"
-                        :class="index % 2 == 0 ? 'bg-gray-100' : ''">
-                        <td class="border-2 p-[0.1cm] text-center ">
-                            {{ index + 1 }}
-                        </td>
-                        <td v-for="(body, index) in columns.slice(1)" :key="index" class="border-2  p-[0.2cm]">
-                            <p v-if="body.title === 'Check In' || body.title === 'Check Out'"> {{
-                                formattedDate(data[body.dataIndex]) }}</p>
-                            <p v-else-if="body.title === 'Total Harga' || body.title === 'Kekurangan'">Rp {{
-                                formattedNumber(data[body.dataIndex]) }}</p>
-                            <p v-else>{{ data[body.dataIndex] }}</p>
-                            <div v-if="body.title === 'Aksi'" class="flex mx-auto w-fit gap-[5px]">
-                                <button v-if="data.status === 'PERMINTAAN BATAL'" @click="cancelReservasi(data.id)"
-                                    class="text-red-600 border-2 border-red-600 rounded md p-[4px] hover:bg-red-200">Batal</button>
-                                <button v-if="data.status === 'KONFIRMASI PEMBAYARAN'" @click="buktiPembayaran(data.id)"
-                                    class="text-red-600 border-2 border-red-600 rounded md p-[4px] hover:bg-red-200">Lihat
-                                    Bukti</button>
-                                <button v-if="data.status === 'BATAL'" @click="deleteReservasi(data.id)"><svg-icon
-                                        type="mdi" :path="path.mdiDeleteForeverOutline"></svg-icon></button>
-                                <button @click="preview(data.id)">
+            <div class="flex gap-[1cm]">
+                <table class=" w-[25cm]">
+                    <thead>
+                        <tr>
+                            <th v-for="(column, index) in columns" :key="index"
+                                class="border-2 p-[0.1cm] border-red-600 bg-red-300">
+                                {{ column.title }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(data, index) in reservasi" :key="index" :class="index % 2 == 0 ? 'bg-gray-100' : ''">
+                            <td class="border-2 p-[0.1cm] text-center ">
+                                {{ index + 1 }}
+                            </td>
+                            <td class="text-center border-b-2">
+                                <button v-if="data.status !== 'BATAL'" class="mx-auto" @click="updateReservasi(data.id)">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                        class="h-[20px] fill-green-600">
-                                        <title>magnify-plus-outline</title>
+                                        class="fill-red-600 h-[20px]">
+                                        <title>pencil</title>
                                         <path
-                                            d="M15.5,14L20.5,19L19,20.5L14,15.5V14.71L13.73,14.43C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.43,13.73L14.71,14H15.5M9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14M12,10H10V12H9V10H7V9H9V7H10V9H12V10Z" />
+                                            d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
                                     </svg>
                                 </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </td>
+                            <td v-for="(body, index) in columns.slice(2)" :key="index" class="border-2  p-[0.2cm]">
+                                <p v-if="body.title === 'Tanggal Masuk' || body.title === 'Tanggal Keluar'"> {{
+                                    formattedDate(data[body.dataIndex]) }}</p>
+                                <p v-else-if="body.title === 'Total Harga' || body.title === 'Kekurangan'">Rp {{
+                                    formattedNumber(data[body.dataIndex]) }}</p>
+                                <p v-else>{{ data[body.dataIndex] }}</p>
+                                <div v-if="body.title === 'Aksi'" class="flex mx-auto w-fit gap-[5px]">
+                                    <button v-if="data.status === 'PERMINTAAN BATAL'"
+                                        @click="konfirmasiCancel(data.id_user, data.id)"
+                                        class="text-red-600 border-2 border-red-600 rounded md p-[4px] hover:bg-red-200">Batal</button>
+                                    <button v-if="data.status === 'KONFIRMASI PEMBAYARAN'" @click="buktiPembayaran(data.id)"
+                                        class="text-red-600 border-2 border-red-600 rounded md p-[4px] hover:bg-red-200">Lihat
+                                        Bukti</button>
+                                    <button v-if="data.status === 'BATAL'" @click="deleteReservasi(data.id)"><svg-icon
+                                            type="mdi" :path="path.mdiDeleteForeverOutline"></svg-icon></button>
+                                    <button v-if="data.status !== 'BATAL' && data.status !== 'PEMBAYARAN'"
+                                        @click="preview(data.id)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                            class="h-[20px] fill-green-600">
+                                            <title>magnify-plus-outline</title>
+                                            <path
+                                                d="M15.5,14L20.5,19L19,20.5L14,15.5V14.71L13.73,14.43C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.43,13.73L14.71,14H15.5M9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14M12,10H10V12H9V10H7V9H9V7H10V9H12V10Z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <p class="font-bold text-[20px]">Ubah Harga Villa</p>
+                    <a-form :model="harga" autocomplete="off" @finish="ubahHarga" class="mt-[0.5cm] text-center">
+                        <a-form-item name="villa" :rules="[{ required: true, message: 'Harga Villa Tidak Boleh Kosong' }]">
+                            <p class="font-mono text-left">Villa</p>
+                            <a-input v-model:value="harga.villa" placeholder="Harga Villa"></a-input>
+                        </a-form-item>
+                        <a-form-item name="orang" :rules="[{ required: true, message: 'Harga Orang Tidak Boleh Kosong' }]">
+                            <p class="font-mono text-left">Orang</p>
+                            <a-input v-model:value="harga.orang" placeholder="Harga Villa"></a-input>
+                        </a-form-item>
+                        <button type="submit"
+                            class="font-bold text-white bg-red-600 border-2 border-red-600 p-[5px] rounded-md hover:bg-red-400">Ubah
+                            Harga</button>
+                    </a-form>
+
+                </div>
+            </div>
         </div>
-        <a-pagination v-model:current="current" show-quick-jumper :total="total" :page-size="totalData.per_page"
-            @change="currentChange" class="lg:ml-[19cm] mt-[0.5cm] ml-[11.5cm] print:hidden" />
+        <a-pagination v-if="namaQuery == '' && statusQuery == null" v-model:current="current" show-quick-jumper
+            :total="total" :page-size="totalData.per_page" @change="currentChange"
+            class="lg:ml-[19cm] mt-[0.5cm] ml-[11.5cm] print:hidden" />
         <div v-if="isComp" class="mx-auto w-fit mt-[1cm] rounded-md flex gap-[1cm] print:hidden">
             <a-date-picker v-model:value="tahunPertama" picker="year" placeholder="Tahun Pertama" class="border-black"
                 @change="yearCompareChange"></a-date-picker>
@@ -190,6 +258,55 @@
             </div>
         </div>
     </div>
+    <a-modal v-model:open="isCancel" title="Konfirmasi Batal Reservasi" @ok="cancelReservasi"
+        @cancel="updateStatus"></a-modal>
+    <a-modal v-model:open="isEdit" title="Ubah Data Reservasi" :footer="null" class="text-center">
+        {{ formattedDate(editReservasi.start_date) }} - {{ formattedDate(editReservasi.end_date) }} |
+        <p class="font-bold"
+            :class="editReservasi.status == 'SELESAI' ? 'text-green-600' : editReservasi.status == 'BATAL' ? 'text-red-600' : 'text-orange-600'">
+            [{{ editReservasi.status }}]</p>
+        <a-form :model="editReservasi" autocomplete="off"
+            @finish="submitUpdateReservasi(editReservasi.id_user, editReservasi.start_date)" class="text-start">
+            <a-form-item name="nama" :rules="[{ required: true, message: 'Nama Tidak Boleh Kosong' }]">
+                <p class="font-mono">Nama</p>
+                <a-input v-model:value="editReservasi.nama"></a-input>
+            </a-form-item>
+            <a-form-item class="-mt-[15px]" name="nomor_telepon"
+                :rules="[{ required: true, message: 'Nomor Tidak Boleh Kosong' }]">
+                <p class="font-mono">Nomor Telepon</p>
+                <a-input v-model:value="editReservasi.nomor_telepon"></a-input>
+            </a-form-item>
+            <div class="flex gap-[10px]">
+                <a-form-item class="-mt-[15px]">
+                    <p class="font-mono ">Dewasa</p>
+                    <a-input-number v-model:value="editReservasi.dewasa" :controls="false"></a-input-number>
+                </a-form-item>
+                <a-button @click="updateJumlah('inc', 'dewasa')" class="mt-[6px]"><svg-icon type="mdi" :path="path.mdiPlus"
+                        class="w-[0.5cm]" /></a-button>
+                <a-button @click="updateJumlah('dec', 'dewasa')" class="mt-[5px]"><svg-icon type="mdi" :path="path.mdiMinus"
+                        class="w-[0.5cm]" /></a-button>
+            </div>
+            <div class="flex gap-[10px]">
+                <a-form-item class="-mt-[15px]">
+                    <p class="font-mono">Anak</p>
+                    <a-input-number v-model:value="editReservasi.anak" :controls="false"></a-input-number>
+                </a-form-item>
+                <a-button @click="updateJumlah('inc', 'anak')" class="mt-[6px]"><svg-icon type="mdi" :path="path.mdiPlus"
+                        class="w-[0.5cm]" /></a-button>
+                <a-button @click="updateJumlah('dec', 'anak')" class="mt-[6px]"><svg-icon type="mdi" :path="path.mdiMinus"
+                        class="w-[0.5cm]" /></a-button>
+            </div>
+            <a-form-item class="-mt-[15px]">
+                <p class="font-mono">Total Harga</p>
+                <a-input v-model:value="updateHarga" :disabled="true"></a-input>
+            </a-form-item>
+            <div class="w-full text-center">
+                <button type="submit"
+                    class="border-2 border-red-600 bg-red-600 text-white font-bold p-[5px] rounded-md hover:bg-red-400">Ubah
+                    Reservasi</button>
+            </div>
+        </a-form>
+    </a-modal>
     <a-modal v-model:open="isPreview" title="Detail Reservasi" class="text-center" :footer="null">
         <div class="divide-y-[2px]">
             <p class="font-bold"> {{ formattedDate(dataReservasi.start_date) }} - {{ formattedDate(dataReservasi.end_date)
@@ -234,7 +351,8 @@
                             </span>
                             <span class="w-[3.8cm] mt-[6px] text-center font-bold">
                                 <p>STATUS</p>
-                                <p :class="dataReservasi.status==='SELESAI' ? 'text-green-600' : 'text-red-600'" class="mt-[10px]">{{ dataReservasi.status }}</p>
+                                <p :class="dataReservasi.status === 'SELESAI' ? 'text-green-600' : 'text-red-600'"
+                                    class="mt-[10px]">{{ dataReservasi.status }}</p>
                             </span>
                         </span>
                     </div>
@@ -291,10 +409,13 @@ import axios from 'axios';
 import Navbar from '../components/template/Navbar.vue'
 
 import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiDeleteForeverOutline, mdiContentCopy } from '@mdi/js'
+import { mdiDeleteForeverOutline, mdiContentCopy, mdiPlus, mdiMinus } from '@mdi/js'
 import { ref } from 'vue';
 
 import moment from 'moment';
+import 'moment/locale/id'
+
+moment.locale('id')
 
 import * as XLSX from 'xlsx'
 import { message } from 'ant-design-vue';
@@ -309,22 +430,24 @@ export default {
             tahunPertama: ref(),
             tahunKedua: ref(),
             inputTahun: new Date(),
-            inputTahun1: null,
-            inputTahun2: null,
-            searchQuery: '',
+            inputTahun1: new Date(),
+            inputTahun2: new Date(),
+            statusQuery: '',
+            namaQuery: '',
             columns: [
                 { title: 'No' },
+                { title: 'Ubah' },
                 { title: 'Nama', dataIndex: 'nama' },
                 { title: 'Nomor Telepon', dataIndex: 'nomor_telepon' },
-                { title: 'Check In', dataIndex: 'start_date' },
-                { title: 'Check Out', dataIndex: 'end_date' },
+                { title: 'Tanggal Masuk', dataIndex: 'start_date' },
+                { title: 'Tanggal Keluar', dataIndex: 'end_date' },
                 { title: 'Total Harga', dataIndex: 'total_harga' },
                 { title: 'Kekurangan', dataIndex: 'sisa_pembayaran' },
                 { title: 'Status', dataIndex: 'status' },
                 { title: 'Aksi' }
             ],
             path: {
-                mdiDeleteForeverOutline, mdiContentCopy
+                mdiDeleteForeverOutline, mdiContentCopy, mdiPlus, mdiMinus
             },
             current: ref(1),
             pendapatan: [],
@@ -368,7 +491,18 @@ export default {
             data02: [],
             isPreview: ref(false),
             detailPrev: {},
-            detailUser: {}
+            detailUser: {},
+            isCancel: ref(false),
+            idUser: null,
+            idRes: null,
+            harga: {
+                villa: 0,
+                orang: 0
+            },
+            isEdit: ref(false),
+            editReservasi: {},
+            jumlahHari: 0,
+
         }
     },
     watch: {
@@ -391,18 +525,9 @@ export default {
     mounted() {
         this.getReservasi()
         this.getLaporanBulanan()
+        this.getAdmin()
     },
     computed: {
-        filteredReservasi() {
-
-            if (!this.searchQuery) {
-                return this.reservasi
-            }
-            return this.reservasi.filter(data => {
-                const searchLower = this.searchQuery.toLowerCase();
-                return data.nama.toLowerCase().includes(searchLower) || data.nomor_telepon.toLowerCase().includes(searchLower) || data.status.toLowerCase().includes(searchLower)
-            })
-        },
         yearChange() {
             this.getReservasi()
             this.getLaporanBulanan()
@@ -413,7 +538,17 @@ export default {
         },
         comparedData() {
             return [this.pembanding1, this.pembanding2]
-        }
+        },
+        updateHarga() {
+            const jumlah = this.editReservasi.dewasa + this.editReservasi.anak
+            let harga = this.harga.villa * this.jumlahHari
+            if (jumlah > 10) {
+                harga = harga + (jumlah - 10) * this.harga.orang
+                return this.editReservasi.total_harga = harga
+            }
+
+            return this.editReservasi.harga = harga
+        },
     },
     methods: {
         async getReservasi() {
@@ -427,10 +562,46 @@ export default {
                     this.reservasi = res.data.data.data
                     this.totalData = res.data.data
                     this.total = this.totalData.last_page * this.totalData.per_page
+                    this.statusQuery = null
+                    this.namaQuery = ''
                     message.success('Data Berhasil Diambil!', 2);
                 })
                 .catch((error) => {
                     console.error(error.response)
+                })
+        },
+        async filterStatus() {
+            const loadingMessage = message.loading('Mencari Data...', 0)
+            const query = this.statusQuery
+            await axios.get(local + `reservasi-status/${query}?page=${this.current}`, {
+                headers: {
+                    Accept: 'application/json'
+                }
+            })
+                .then(res => {
+                    loadingMessage()
+                    this.reservasi = res.data.data
+                    this.total = 1
+                    this.namaQuery = ''
+                    message.success('Data Berhasil Diambil!', 2)
+                })
+        },
+        async filterNama() {
+            const loadingMessage = message.loading('Mencari Data...', 0)
+            const query = this.namaQuery
+            console.log('HELLO')
+            await axios.get(local + `reservasi-nama/${query}?page=${this.current}`, {
+                headers: {
+                    Accept: 'application/json'
+                }
+            })
+                .then(res => {
+                    loadingMessage()
+                    console.log('DATA FILTER: ', res)
+                    this.reservasi = res.data.data
+                    this.total = 1
+                    this.statusQuery = null
+                    message.success('Data Berhasil Diambil!', 2)
                 })
         },
         async getReservasiByID(id) {
@@ -518,6 +689,8 @@ export default {
                         }));
 
                         this[stateProp2] = data
+                        console.log('DATA01 : ', this.data01)
+                        console.log('DATA02 : ', this.data02)
 
                     } else {
                         console.error('Unexpected response format: ', pendapatanBulanan)
@@ -544,8 +717,8 @@ export default {
                     message.success(res.data.message, 2)
                 })
         },
-        async cancelReservasi(idReservasi) {
-            const id = idReservasi
+        async cancelReservasi() {
+            const id = this.idRes
             const loadingMessage = message.loading('Membatalkan...', 0)
             await axios.put(local + `reservasi-cancel/${id}`, {}, {
                 headers: {
@@ -554,13 +727,34 @@ export default {
             })
                 .then(res => {
                     loadingMessage()
-                    message.success(res.data.message, 2)
+                    this.isCancel = false
+                    message.success('Reservasi Berhasil Dibatalkan!', 2)
                     this.getReservasi()
 
                 })
                 .catch((error) => {
                     console.error(error.response)
                     console.error(error.response.data)
+                })
+        },
+        async updateStatus() {
+            const id = this.idUser
+            const loadingMessage = message.loading('Ubah Status Batal...', 0)
+            await axios.put(local + `update-status/${id}`, {
+                from_status: 'PERMINTAAN BATAL',
+                to_status: 'SELESAI'
+            })
+                .then(res => {
+                    loadingMessage()
+                    this.isCancel = false
+                    this.getReservasi()
+                    message.success('Permintaan Batal Dibatalkan!', 2)
+                })
+                .catch((error) => {
+                    loadingMessage()
+                    console.error(error.response)
+                    console.error(error.response.data)
+                    message.error('Gagal Mengubah Status Permintaan Batal!', 2)
                 })
         },
         async deleteReservasi(id) {
@@ -585,7 +779,9 @@ export default {
             })
                 .then(res => {
                     this.isPreview = true
+
                     this.detailPrev = res.data.data
+
                     this.getUser(this.detailPrev.id_user)
                     this.getReservasiByID(this.detailPrev.id_reservasi)
                 })
@@ -600,6 +796,109 @@ export default {
                     console.log(res)
                     this.detailUser = res.data.data
                 })
+        },
+        async getAdmin() {
+            await axios.get(local + 'admin', {
+                headers: {
+                    Accept: 'application/json'
+                }
+            })
+                .then(res => {
+                    console.log(res)
+                    this.harga.villa = res.data.data[0].harga_villa
+                    this.harga.orang = res.data.data[0].harga_orang
+                })
+        },
+        async ubahHarga() {
+            const loadingMessage = message.loading('Mengubah Harga...', 0)
+            await axios.put(local + `harga?harga_villa=${this.harga.villa}&harga_orang=${this.harga.orang}`, {}, {
+                headers: {
+                    Accept: 'application/json'
+                }
+            })
+                .then(res => {
+                    loadingMessage()
+                    this.getAdmin()
+                    message.success(res.data.message, 2)
+                })
+                .catch((error) => {
+                    loadingMessage()
+                    console.error(error.response)
+                    console.error(error.response.data)
+                    this.getAdmin()
+                    message.error('Ubah Harga Gagal!', 2)
+                })
+        },
+        async updateReservasi(id) {
+            const loadingMessage = message.loading('Mengambil Data...', 0)
+            await axios.get(local + `reservasi-id/${id}`, {
+                headers: {
+                    Accept: 'application/json'
+                }
+            })
+                .then(res => {
+                    loadingMessage()
+                    console.log(res)
+                    this.editReservasi = res.data.data
+                    this.hari()
+                    this.isEdit = true
+                    message.success('Data Berhasil Diambil!', 2)
+                })
+        },
+        async submitUpdateReservasi(id, tanggal) {
+            const loadingMessage = message.loading('Mengubah Data...', 0)
+            const dewasa = this.editReservasi.dewasa; const anak = this.editReservasi.anak
+            const nomor_telepon = this.editReservasi.nomor_telepon; const nama = this.editReservasi.nama
+            const total_harga = this.editReservasi.total_harga
+            await axios.put(local + `reservasi/${id}/${tanggal}?dewasa=${dewasa}&anak=${anak}&nomor_telepon=${nomor_telepon}&nama=${nama}&total_harga=${total_harga}`, {}, {
+                headers: {
+                    Accept: 'application/json'
+                }
+            })
+                .then(res => {
+                    loadingMessage()
+                    console.log(res)
+                    this.getReservasi()
+                    this.isEdit = false
+                    message.success('Data Reservasi Berhasil Diubah!')
+                })
+                .catch((error) => {
+                    loadingMessage()
+                    console.error(error.response)
+                    console.error(error.response.data)
+                    message.error(error.response.data.message)
+                })
+        },
+        updateJumlah(formula, type) {
+            if (type == 'dewasa') {
+                if (formula == 'inc' && this.editReservasi.dewasa < 30 && (this.editReservasi.dewasa + this.editReservasi.anak) !== 30) {
+                    this.editReservasi.dewasa++
+                } else if (formula == 'dec' && this.editReservasi.dewasa > 0) {
+                    this.editReservasi.dewasa--
+                }
+            } else {
+                if (formula == 'inc' && this.editReservasi.anak < 30 && (this.editReservasi.dewasa + this.editReservasi.anak) !== 30) {
+                    this.editReservasi.anak++
+                } else if (formula == 'dec' && this.editReservasi.anak > 0) {
+                    this.editReservasi.anak--
+                }
+            }
+
+        },
+        hari() {
+            this.jumlahHari = moment(this.editReservasi.end_date).diff(moment(this.editReservasi.start_date), 'days')
+            console.log('JUMLAH HARI: ', this.jumlahHari)
+
+            return this.jumlahHari
+
+        },
+        formattedDate(time) {
+            return moment(time).format('DD MMM YYYY')
+        },
+        konfirmasiCancel(idUser, idRes) {
+            this.isCancel = true
+            this.idUser = idUser
+            this.idRes = idRes
         },
         exportToExcel() {
             const data = this.pendapatan[0].data.map((value, index) => ({
@@ -707,9 +1006,6 @@ export default {
 
             XLSX.writeFile(workbook, 'pendapatan-villa.xlsx');
         },
-        formattedDate(time) {
-            return moment(time).format('DD MMM YYYY')
-        },
         formattedNumber(number) {
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         },
@@ -727,7 +1023,16 @@ export default {
             });
         },
         currentChange() {
+            console.log('CURRENT')
             this.getReservasi()
+        },
+        statusChange() {
+            console.log('STATUSS')
+            this.filterStatus()
+        },
+        namaChange() {
+            console.log('NAMA')
+            this.filterNama()
         },
         formattedDate(time) {
             return moment(time).format('DD MMM YYYY')

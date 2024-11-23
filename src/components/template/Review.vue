@@ -36,8 +36,9 @@
                                         <p class="text-[15px]">{{ data.user.email }}</p>
                                     </div>
                                 </div>
-                                <a-rate v-model:value="data.bintang" disabled="true"></a-rate>
-                                <p class="border-2 text-start p-[3px] h-[2cm] border-e-2">{{ data.ulasan }}</p>
+                                <p class="text-left">{{ formattedDate(data.updated_at) }}</p>
+                                <a-rate v-model:value="data.bintang" :disabled="true"></a-rate>
+                                <p class="border-2 text-start p-[3px] h-[2cm] border-e-2 overflow-y-scroll">{{ data.ulasan }}</p>
                             </div>
                         </div>
                         <div class="lg:w-[5cm] w-[3cm]">
@@ -51,7 +52,7 @@
                                 </svg>
                                 <p class="mb-[1px]">{{ i }}</p>
                                 <a-slider v-model:value="jumlah['bintang' + i].length" :max="jumlahReview" class="w-[3cm]"
-                                    disabled="true"></a-slider>
+                                    :disabled="true"></a-slider>
                             </div>
                         </div>
                     </div>
@@ -102,6 +103,8 @@ import { message } from 'ant-design-vue'
 import axios from 'axios'
 import { ref } from 'vue'
 
+import moment from 'moment/dist/moment'
+
 export default {
     nama: 'TemplateReview',
     data() {
@@ -141,8 +144,8 @@ export default {
                 }
             })
                 .then(res => {
-                    console.log(res)
-                    const reviews = res.data.data.data
+                    console.log('REVIEW',res)
+                    const reviews = res.data.data
                     const idUser = parseInt(localStorage.getItem('idUser'), 10);
 
                     if (this.rateFilter === 0) {
@@ -157,7 +160,7 @@ export default {
                     } else {
                         this.review = reviews.filter(data => data.bintang === this.rateFilter);
                     }
-                    this.jumlahReview = res.data.data.total
+                    this.jumlahReview = res.data.data.length
                     this.jumlah = {
                         bintang1: reviews.filter(data => data.bintang === 1),
                         bintang2: reviews.filter(data => data.bintang === 2),
@@ -213,6 +216,9 @@ export default {
                     message.error(error.response.data.message, 2)
                     this.getData()
                 })
+        },
+        formattedDate(time) {
+            return moment(time).format('LL')
         },
         rateChange() {
             console.log('RATE FILTER :', this.rateFilter)

@@ -65,6 +65,9 @@
 import { local } from '../../api'
 
 import moment from 'moment';
+import 'moment/locale/id'
+moment.locale('id')
+
 import axios from 'axios';
 
 export default {

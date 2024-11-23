@@ -51,7 +51,7 @@
                         formattedNumber(lunas) }}<svg-icon type="mdi" :path="path.mdiContentCopy"
                                 class="h-[10px] my-auto" /></a></p>
                     <p>5. Unggah Bukti Pembayaran</p>
-                    <input type="file" id="file" @change="onChangeFileUpload" class="mt-[10px]" accept="image/png, image/jpeg" />
+                    <input type="file" id="file" @change="onChangeFileUpload" class="mt-[10px]" accept="image/*" />
                     <button type="submit" @click="uploadBukti('BCA')"
                         class="border-2 border-red-600 h-fit rounded-md p-[4px] text-red-600 hover:bg-red-200">Kirim</button>
                 </div>

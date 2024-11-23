@@ -118,6 +118,8 @@ import { mdiPlus, mdiMinus } from '@mdi/js'
 
 import axios from 'axios'
 import moment from 'moment'
+import 'moment/locale/id'
+moment.locale('id')
 import { mapActions, mapState } from 'vuex'
 
 import { message } from 'ant-design-vue'
@@ -146,6 +148,10 @@ export default {
             today: new Date(),
             path: {
                 mdiPlus, mdiMinus
+            },
+            harga: {
+                villa: 0,
+                orang: 0
             }
         }
     },
@@ -176,9 +182,9 @@ export default {
         },
         updateHarga() {
             const jumlah = this.input.dewasa + this.input.anak
-            let harga = 1250000 * this.jumlahHari
+            let harga = this.harga.villa * this.jumlahHari
             if (jumlah > 10) {
-                harga = harga + (jumlah - 10) * 100000
+                harga = harga + (jumlah - 10) * this.harga.orang
                 return this.input.harga = harga
             }
 
@@ -186,9 +192,9 @@ export default {
         },
         updateHargaRecord() {
             const jumlah = this.userRes.dewasa + this.userRes.anak
-            let harga = 1250000 * this.jumlahHariRecord
+            let harga = this.harga.villa * this.jumlahHariRecord
             if (jumlah > 10) {
-                harga = harga + (jumlah - 10) * 100000
+                harga = harga + (jumlah - 10) * this.harga.orang
                 return this.userRes.total_harga = harga
             }
             return this.userRes.total_harga = harga
@@ -197,12 +203,13 @@ export default {
     mounted() {
         this.recordRes()
         this.getData()
+        this.admin()
     },
     methods: {
         ...mapActions(['reservasi', 'showAlert', 'hideAlert']),
         async getData() {
             const id = localStorage.getItem('idUser')
-            await axios.get(local + `users/${id}`,{
+            await axios.get(local + `users/${id}`, {
                 headers: {
                     Accept: 'application/json'
                 }
@@ -210,7 +217,7 @@ export default {
                 .then(res => {
                     console.log(res)
                     this.user = res.data.data
-                    
+
                     this.input.nama = this.user.name
                     this.input.noTelp = this.user.nomor_telepon
                 })
@@ -245,10 +252,14 @@ export default {
                     this.input.noTelp = ''
                     this.input.startDate = ''
                     message.success(res.data.message, 2)
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 2000)
+
                 })
                 .catch(async (error) => {
                     loadingMessage()
-                    console.error(error)
+                    console.error(error.response)
                     console.error(error.response.data.message)
                     message.error(error.response.data.message, 2)
                 })
@@ -319,6 +330,17 @@ export default {
                 .catch((error) => {
                     console.error(error.response)
                     console.error(error.response.data)
+                })
+        },
+        async admin() {
+            await axios.get(local + 'admin', {
+                headers: {
+                    Accept: 'application/json'
+                }
+            })
+                .then(res => {
+                    this.harga.villa = res.data.data[0].harga_villa
+                    this.harga.orang = res.data.data[0].harga_orang
                 })
         },
         hari() {
